@@ -1,0 +1,17 @@
+{
+  "outputPath": "docs/prompts",
+  "filePrefix": "prompt-tracker-",
+  "saveAllLogs": true,
+  "billing": {
+    "enabled": true,
+    "models": [
+      {
+        "model": "opencode/minimax-m2.5-free",
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "opencode-impm",
+  "version": "0.1.0",
+  "description": "AI项目经理插件 - 基于OpenCode的工程化全流程开发插件",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "install:plugin": "node scripts/install.mjs",
+    "postinstall": "node scripts/install.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "opencode-plugin",
+    "impm",
+    "project-manager",
+    "ai",
+    "tdd"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^3.23.0",
+    "yaml": "^2.6.0"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": "^1.0.0",
+    "@opencode-ai/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.0.0",
+    "typescript": "^5.7.0",
+    "@types/node": "^22.0.0"
+  },
+  "files": [
+    "dist/",
+    "assets/",
+    "scripts/",
+    "template/"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
