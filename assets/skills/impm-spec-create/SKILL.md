@@ -20,7 +20,7 @@ impm-spec-create
 使用impm_doc_reader读取：
 - PRD文档
 - project.md
-- ARCHITECTURE.md（如有）
+- architecture.md（如有）
 
 ### 2. 生成spec
 根据PRD和架构文档，生成技术规格说明：

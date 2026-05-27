@@ -1,6 +1,6 @@
 ---
 name: impm-architect-update
-description: 创建或更新架构文档 - 根据PRD和project.md生成ARCHITECTURE.md
+description: 创建或更新架构文档 - 根据PRD和project.md生成architecture.md
 license: MIT
 ---
 
@@ -11,7 +11,7 @@ impm-architect-update
 
 ## 何时使用
 - PRD文档生成完成后
-- 判断：如ARCHITECTURE.md不存在，则创建
+- 判断：如architecture.md不存在，则创建
 - 判断：如已存在，但PRD涉及架构变更，则更新
 - 判断：如已存在且不涉及架构变更，则跳过
 
@@ -21,7 +21,7 @@ impm-architect-update
 使用impm_doc_reader读取：
 - PRD文档
 - project.md
-- 现有的ARCHITECTURE.md（如有）
+- 现有的architecture.md（如有）
 
 ### 2. 分析架构需求
 - 分析PRD中的功能需求对架构的影响
@@ -30,7 +30,7 @@ impm-architect-update
 - 确定数据流和交互方式
 
 ### 3. 生成/更新架构文档
-按以下格式生成ARCHITECTURE.md：
+按以下格式生成architecture.md：
 
 ```markdown
 # 架构文档
@@ -73,13 +73,13 @@ impm-architect-update
 如需查询相关信息，可使用网络搜索获取技术文档。
 
 ### 5. 写入文档
-使用impm_doc_writer将架构文档写入项目根目录的ARCHITECTURE.md。
+使用impm_doc_writer将架构文档写入docs/architecture.md。
 
 ### 6. 返回结果
 返回文档路径或"无需更新"给PM agent。
 
 ## 交付物
-- ARCHITECTURE.md 文件（在项目根目录）
+- docs/architecture.md 文件
 
 ## 注意事项
 - 首次创建需要完整生成

@@ -24,7 +24,7 @@ impm-project-update
 - docs/prds
 
 ### 2. 判断project.md是否存在
-- 如果不存在：根据 `template/PROJECT-TEMPLATE.MD` 模板创建
+- 如果不存在：创建一个新的project.md
 - 如果已存在：只更新Project Map部分
 
 ### 3. 填充Project Info（仅首次创建）
@@ -51,10 +51,10 @@ impm-project-update
 - 每个函数/类的一句话描述
 
 ### 6. 写入project.md
-使用impm_doc_writer将内容写入项目根目录的project.md。
+使用impm_doc_writer将内容写入docs/project.md。
 
 ## 交付物
-- project.md 文件（在项目根目录）
+- docs/project.md 文件
 
 ## 注意事项
 - 首次创建时三个部分都要生成

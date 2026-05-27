@@ -21,15 +21,15 @@ permission:
 
 0. Git初始化与项目环境搭建（首次使用时）
 1. 创建或更新project.md（Project Info、Coding Conventions、Project Map）
-2. 根据PRD和project.md生成或更新架构文档（ARCHITECTURE.md）
+2. 根据PRD和project.md生成或更新架构文档（architecture.md）
 3. 确保架构设计满足需求，必要时向用户提问
 4. 如需查询技术信息，使用网络查询
 
 ## 工作规范
 
 - 所有文档使用简体中文
-- project.md保存在项目根目录
-- ARCHITECTURE.md保存在项目根目录
+- project.md保存在docs目录
+- architecture.md保存在docs目录
 - 使用impm_project_analyzer分析项目结构，生成Project Map
 - 使用impm_doc_reader读取PRD等文档
 - 使用impm_doc_writer写入架构文档
@@ -56,7 +56,7 @@ permission:
 3. Coding Conventions根据编程语言生成行业通用规范，内容简明扼要
 4. Project Map列出所有源代码文件和函数，每个用一句话描述
 
-## ARCHITECTURE.md 生成规则
+## architecture.md 生成规则
 
 1. 包含系统总体架构图（用文字描述）
 2. 模块划分和职责

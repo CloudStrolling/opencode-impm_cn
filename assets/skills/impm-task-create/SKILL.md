@@ -19,7 +19,7 @@ impm-task-create
 使用impm_doc_reader读取：
 - PRD文档
 - project.md
-- ARCHITECTURE.md
+- architecture.md
 - spec文档
 
 ### 2. 生成任务清单
