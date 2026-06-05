@@ -9,7 +9,10 @@
     "dev": "tsc --watch",
     "install:plugin": "node scripts/install.mjs",
     "postinstall": "node scripts/install.mjs",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepack": "npm run build",
+    "publish:public": "node scripts/publish.mjs",
+    "publish:dry": "node scripts/publish.mjs --dry-run"
   },
   "keywords": [
     "opencode-plugin",
@@ -36,8 +39,16 @@
   "files": [
     "dist/",
     "assets/",
-    "scripts/"
+    "scripts/install.mjs"
   ],
+  "homepage": "https://github.com/opencode-ai/opencode-impm",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opencode-ai/opencode-impm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/opencode-ai/opencode-impm/issues"
+  },
   "engines": {
     "node": ">=18.0.0"
   }

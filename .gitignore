@@ -30,7 +30,7 @@ Thumbs.db
 coverage/
 
 # opencode会话日志
-docs/prompts/
+docs/
 
 # 依赖缓存
 .pnp
