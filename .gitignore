@@ -29,6 +29,9 @@ Thumbs.db
 # 测试覆盖率
 coverage/
 
+# opencode会话日志
+docs/prompts/
+
 # 依赖缓存
 .pnp
 .pnp.js

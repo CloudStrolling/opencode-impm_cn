@@ -16,8 +16,10 @@ subtask: false
 
 ## 操作流程
 
-1. 启动BA subagent，将用户输入传递给它
-2. BA subagent应执行impm-prd-create技能：
+1. 确保需求文档已存在，获取需求文档路径
+2. 启动BA subagent，将需求文档路径传递给它
+3. BA subagent应执行impm-prd-create技能：
    - 读取已有的需求文档
    - 按UserStory格式生成PRD文档
-3. 等待BA完成后，返回结果摘要
+   - 在docs/prds/目录下输出PRD文档
+4. 等待BA完成后，返回结果摘要和文档路径

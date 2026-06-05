@@ -1,5 +1,5 @@
 ---
-description: 创建任务清单 - 根据PRD和架构文档生成任务.md和任务.json
+description: 创建任务清单 - 根据PRD和架构文档生成task.md和task.json
 agent: pm
 subtask: false
 ---
@@ -12,13 +12,14 @@ subtask: false
 
 ## 你的职责
 
-启动TL subagent执行impm-task-create技能，根据PRD和架构文档生成任务清单（task.md和task.json）。
+启动TL subagent执行impm-task-create技能，根据PRD和架构文档生成任务清单。
 
 ## 操作流程
 
-1. 启动TL subagent，将用户输入传递给它
-2. TL subagent应执行impm-task-create技能：
-    - 读取PRD文档和architecture.md
+1. 确保PRD文档和架构文档、sds文档已存在
+2. 启动TL subagent，传递PRD、架构和sds文档路径
+3. TL subagent应执行impm-task-create技能：
+   - 读取PRD文档、architecture.md和sds文档
    - 拆解为可执行的任务
-   - 生成task.md和task.json
-3. 等待TL完成后，返回结果摘要
+   - 在docs/tasks/目录下生成task.md和task.json
+4. 等待TL完成后，返回结果摘要和文档路径

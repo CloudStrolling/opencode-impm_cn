@@ -3,13 +3,13 @@
  *
  * 从标准路径读取项目文档，自动处理版本号查找和项目名称推断。
  * 支持两种文档类型：
- * - 固定文件：project.md（项目信息）、ARCHITECTURE.md（架构文档）
+ * - 固定文件：docs/project.md（项目信息）、ARCHITECTURE.md（架构文档）
  * - 版本化文件：docs/{type}/ 目录下的带版本号md文件
  */
 
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { DOC_TYPE_DIR, getDocFileName } from "../utils/paths.js";
+import { DOC_TYPE_DIR, getDocFileName, TEMPLATES_DIR } from "../utils/paths.js";
 import {
     extractVersionFromFileName,
     compareVersions,
@@ -19,7 +19,7 @@ import {
 /** 文档读取工具的输入参数 */
 interface DocReaderArgs {
     projectRoot: string; // 项目根目录绝对路径
-    docType: string; // 文档类型：requirement | prd | spec | task | architect | project
+    docType: string; // 文档类型：requirement | prd | sds | task | architect | project
     version?: string; // 版本号（可选，不传则自动查找最新版本）
     projectName?: string; // 项目名称（可选，不传则从文件名推断）
 }
@@ -27,7 +27,7 @@ interface DocReaderArgs {
 /** 工具定义（供index.ts注册用） */
 export const docReaderDefinition = {
     description:
-        "读取impm项目文档（需求文档、PRD、spec、task、架构文档、project.md）",
+        "读取impm项目文档（需求文档、PRD、sds、task、架构文档、project.md、技能模板）",
     args: {
         projectRoot: {
             type: "string" as const,
@@ -36,7 +36,7 @@ export const docReaderDefinition = {
         docType: {
             type: "string" as const,
             description:
-                "文档类型：requirement | prd | spec | task | architect | project",
+                "文档类型：requirement | prd | sds | task | architect | project | template",
         },
         version: {
             type: "string" as const,
@@ -60,11 +60,22 @@ export const docReaderDefinition = {
 export async function docReaderExecute(args: DocReaderArgs): Promise<string> {
     const { projectRoot, docType, version, projectName } = args;
 
-    // project.md 和 ARCHITECTURE.md 位于项目根目录，不涉及版本号
+    // project.md 和 ARCHITECTURE.md 不涉及版本号
     if (docType === "project") {
-        const filePath = join(projectRoot, "project.md");
+        const filePath = join(projectRoot, "docs", "project.md");
         if (!existsSync(filePath)) {
             return "project.md 文件不存在";
+        }
+        return readFileSync(filePath, "utf-8");
+    }
+
+    // 模板文件从 .opencode/skills/{skillName}/ 读取
+    if (docType === "template") {
+        const skillName = projectName || "impm-project-update";
+        const templateDir = join(projectRoot, TEMPLATES_DIR, skillName);
+        const filePath = join(templateDir, "PROJECT-TEMPLATE.MD");
+        if (!existsSync(filePath)) {
+            return `模板文件不存在: ${filePath}`;
         }
         return readFileSync(filePath, "utf-8");
     }
@@ -80,7 +91,7 @@ export async function docReaderExecute(args: DocReaderArgs): Promise<string> {
     // 版本化文档需要查找对应的目录和文件名
     const docDir = DOC_TYPE_DIR[docType];
     if (!docDir) {
-        return `不支持的文档类型: ${docType}。支持: requirement, prd, spec, task, architect, project`;
+        return `不支持的文档类型: ${docType}。支持: requirement, prd, sds, task, architect, project, template`;
     }
 
     const fullDir = join(projectRoot, docDir);
@@ -134,11 +145,11 @@ function findLatestVersion(dir: string, docType: string): string | null {
             ? "requirement"
             : docType === "prd"
               ? "prd"
-              : docType === "spec"
-                ? "spec"
-                : docType === "task"
-                  ? "task"
-                  : null;
+              : docType === "sds"
+                ? "sds"
+              : docType === "task"
+                ? "task"
+                : null;
 
     if (!prefix) return null;
 
@@ -182,9 +193,9 @@ function inferProjectName(
             ? "requirement"
             : docType === "prd"
               ? "prd"
-              : docType === "spec"
-                ? "spec"
-                : docType === "task"
+              : docType === "sds"
+                ? "sds"
+              : docType === "task"
                   ? "task"
                   : null;
 

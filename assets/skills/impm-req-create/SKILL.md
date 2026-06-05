@@ -1,7 +1,6 @@
 ---
 name: impm-req-create
 description: 创建需求文档 - 根据提示词生成带版本号的需求文档
-license: MIT
 ---
 
 # impm-req-create 技能
@@ -16,7 +15,7 @@ impm-req-create
 ## 执行步骤
 
 ### 1. 读取输入材料
-- 用户的提示词（/impm命令后的文本）
+- 用户的提示词
 - 提示词中提到的需求文档路径
 
 ### 2. 确定版本号
@@ -26,7 +25,11 @@ impm-req-create
 - 如果目录下没有文件，使用默认版本号v0.0.1
 
 ### 3. 整理需求文档
-将提示词和需求文档内容合并，按以下格式整理：
+- 将提示词和需求文档内容合并。
+- 分析业务需求，识别痛点和价值点。
+- 需求澄清、需求降噪，
+- 需求有不明确的地方，直接询问用户
+- 需求收集，分析完成后，按以下格式整理：
 
 ```markdown
 # 需求文档
@@ -56,12 +59,17 @@ impm-req-create
 {假设和依赖描述}
 ```
 
+如有需要，可以通过搜索本地代码（用CS subagent）和网上查询（用WS subagent）收集需求业务相关信息，完善文档。
+
 ### 4. 写入文档
 使用impm_doc_writer将需求文档写入：
 `docs/requires/{项目名称}-requirement-v{x.x.x}.md`
+将docs/project.md 的当前进度改为：impm-req
 
 ### 5. 返回文档位置
 返回生成的文档路径给PM agent。
+
+
 
 ## 交付物
 - docs/requires/{项目名称}-requirement-v{x.x.x}.md

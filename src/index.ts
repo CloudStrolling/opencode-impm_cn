@@ -61,13 +61,13 @@ export default async function impmPlugin(context: {
     return {
         /** 自定义工具注册表 */
         tool: {
-            /** 文档读取工具 — 从标准路径读取需求/PRD/spec/任务/架构等文档 */
+            /** 文档读取工具 — 从标准路径读取需求/PRD/sds/任务/架构等文档 */
             impm_doc_reader: {
                 description: docReaderDefinition.description,
                 args: {
                     projectRoot: createStringSchema("项目根目录的绝对路径"),
                     docType: createStringSchema(
-                        "文档类型：requirement | prd | spec | task | architect | project",
+                        "文档类型：requirement | prd | sds | task | architect | project",
                     ),
                     version: createStringSchema(
                         "版本号（可选，不传则自动获取最新版本）",
@@ -91,7 +91,7 @@ export default async function impmPlugin(context: {
                 args: {
                     projectRoot: createStringSchema("项目根目录的绝对路径"),
                     docType: createStringSchema(
-                        "文档类型：requirement | prd | spec | task | architect | project",
+                        "文档类型：requirement | prd | sds | task | architect | project",
                     ),
                     version: createStringSchema("版本号"),
                     projectName: createStringSchema("项目名称"),

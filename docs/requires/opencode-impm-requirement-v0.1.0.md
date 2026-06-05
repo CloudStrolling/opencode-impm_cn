@@ -34,7 +34,7 @@
 2. 首先判断是否存在如下文件夹，如果不存在就创建：
 
 - docs
-- docs/specs
+- docs/sds
 - docs/requires
 - docs/tasks
 - docs/prds
@@ -102,25 +102,25 @@ PM在主流程里判断：
 4. 如果在生成architect.md的过程中，需要查询相关信息，可以直接调用网络查询的MCP进行网络查询。
 5. 保存或更新到architect.md。然后 BA subagent退出，PM agent继续后续步骤。
 
-后继步骤：生成spec文件
+后继步骤：生成sds文件
 
-## 6.生成spec
+## 6.生成sds
 
 前序步骤：生成PRD文件或架构文档
 
-调用impm-spec-create技能。技能内容：
+调用impm-sds-create技能。技能内容：
 
 1. 启动TL subagent。
-2. PRD，project.md 和 architect.md，生成spec。
-3. spec文件存放在：docs/tasks/{项目名称}-spec-v{x.x.x}.MD
-4. 如果在生成spec的过程中，有什么需要明确的需求，可以直接向用户提问。直至所需的细节全部清晰。
-5. spec生成完毕后，TL subagent退出，PM agent继续后续步骤。
+2. PRD，project.md 和 architect.md，生成sds。
+3. sds文件存放在：docs/tasks/{项目名称}-sds-v{x.x.x}.MD
+4. 如果在生成sds的过程中，有什么需要明确的需求，可以直接向用户提问。直至所需的细节全部清晰。
+5. sds生成完毕后，TL subagent退出，PM agent继续后续步骤。
 
 后继步骤：生成任务文件
 
 ## 7.生成任务(task)文件
 
-前序步骤：生成spec
+前序步骤：生成sds
 
 PM在主流程里调用impm-task-create技能。技能内容：
 
@@ -192,7 +192,7 @@ CS subagent
 |    PM     |    Project Manager     |        分析并编排，调用其他Agent        |
 |    BA     |    Business Analyst    |      产生需求分析文档和user story       |
 |    SA     |  Software Architect‌   |      生成架构文档和搭建环境和架构       |
-|    TL     |       Tech Lead        |           生成spec，审核代码            |
+|    TL     |       Tech Lead        |           生成sds，审核代码            |
 |    DE     | Development Engineer‌  |  代码实现、代码修改、执行命令（通用）   |
 |    FE     |       Front End        |        创意专家。UI/UX、前端工作        |
 |    BE     |        Back End        | 后端工程师，负责Web应用的前端与后端接口 |
@@ -219,7 +219,7 @@ CS subagent
 |    impm-req-create     |     创建需求文档      |    impm-req-create     |                                 根据提示词生成带版本号的需求文档                                 |
 |    impm-prd-create     |      创建prd文档      |    impm-prd-create     |                                    根据需求文档生成prd文档。                                     |
 | impm-architect‌-update |  创建或更新架构文件   | impm-architect‌-update |                      根据需求文档和 project.md，创建或更新 ARCHITECTURE.md                       |
-|    impm-spec-create    |       创建spec        |    impm-spec-create    | 根据输入的prd文件,架构文件，project文件，生成对应版本的spec docs/specs/{项目名称}-spec-vx.x.x.md |
-|    impm-task-create    |       创建task        |    impm-task-create    |     根据架构文件，project文件，spec文件，生成对应版本的docs/tasks/{项目名称}-task-vx.x.x.md      |
+|    impm-sds-create    |       创建sds        |    impm-sds-create    | 根据输入的prd文件,架构文件，project文件，生成对应版本的sds docs/sds/{项目名称}-sds-vx.x.x.md |
+|    impm-task-create    |       创建task        |    impm-task-create    |     根据架构文件，project文件，sds文件，生成对应版本的docs/tasks/{项目名称}-task-vx.x.x.md      |
 |      impm-coding       |       执行编码        |      impm-coding       |                             针对task实行编码，多agent，TDD驱动的编码                             |
 |    impm-doc-update     |       执行编码        |    impm-doc-update     |                                         更新项目相关文档                                         |

@@ -9,8 +9,8 @@
 
 ## 目录
 
-1. [技术方案概述](#1-技术方案概述)
-2. [模块详细设计](#2-模块详细设计)
+1. [技术方案概述]
+2. [模块详细设计]
    - [2.1 编排引擎层 — PM Agent](#21-编排引擎层--pm-agent)
    - [2.2 技能执行层 — 8个Skills](#22-技能执行层--8个skills)
    - [2.3 工具层 — 7个核心工具](#23-工具层--7个核心工具)
@@ -53,7 +53,7 @@
 ├─────────────────────────────────────────────────────────────────┤
 │ Layer 3: 技能执行层 (8个Skills)                                  │
 │    project-update→req-create→prd-create→architect-update→        │
-│    spec-create→task-create→coding→doc-update                     │
+│    sds-create→task-create→coding→doc-update                     │
 ├─────────────────────────────────────────────────────────────────┤
 │ Layer 4: 工具层 (7个核心Tool)                                    │
 │   doc_reader / doc_writer / doc_version / task_manager /         │
@@ -68,7 +68,7 @@
 ### 1.3 核心工程流程
 
 ```
-用户输入 → project.md → requirement → PRD → 架构 → Spec → Task → 编码 → 文档
+用户输入 → project.md → requirement → PRD → 架构 → SDS → Task → 编码 → 文档
 ```
 
 这是一个单向管道流程，每个步骤的输出文档是下一步骤的唯一输入依赖。
@@ -92,7 +92,7 @@
 | US-003 | req-create 技能 + doc_version/doc_writer 工具（第2.2节、第2.3节） |
 | US-004 | prd-create 技能 + doc_reader/doc_writer 工具（第2.2节） |
 | US-005 | architect-update 技能（第2.2节） |
-| US-006 | spec-create 技能（即本spec对应的技能，第2.2节） |
+| US-006 | sds-create 技能（即本sds对应的技能，第2.2节） |
 | US-007 | task-create 技能 + task_manager 工具（第2.2节、第2.3节） |
 | US-008 | coding 技能 + context_builder 工具（第2.2节、第2.3节） |
 | US-009 | doc-update 技能（第2.2节） |
@@ -142,10 +142,10 @@ async function impmFlow(userInput: UserInput):
   ARCHITECTURE.md = skill(impm-architect-update, prd.md, project.md)
 
   // Step 5: 技术规格说明生成
-  spec.md = skill(impm-spec-create, prd.md, ARCHITECTURE.md, project.md)
+  sds.md = skill(impm-sds-create, prd.md, ARCHITECTURE.md, project.md)
 
   // Step 6: 任务清单生成
-  task.md + task.json = skill(impm-task-create, prd.md, ARCHITECTURE.md, spec.md, project.md)
+  task.md + task.json = skill(impm-task-create, prd.md, ARCHITECTURE.md, sds.md, project.md)
 
   // Step 7: 循环执行编码任务
   for each task in taskList sorted by dependency:
@@ -276,7 +276,7 @@ async function impmFlow(userInput: UserInput):
 
 **对应 PRD：** US-005
 
-#### 2.2.5 impm-spec-create（TL subagent）
+#### 2.2.5 impm-sds-create（TL subagent）
 
 **功能描述：** 读取 PRD、架构文档和 `project.md`，生成技术规格说明（即本技能）。
 
@@ -285,7 +285,7 @@ async function impmFlow(userInput: UserInput):
 - `ARCHITECTURE.md`
 - `project.md`
 
-**输出：** `docs/specs/{项目名称}-spec-v{x.x.x}.md`
+**输出：** `docs/sds/{项目名称}-sds-v{x.x.x}.md`
 
 **文档结构：**
 - 技术方案概述
@@ -297,12 +297,12 @@ async function impmFlow(userInput: UserInput):
 
 #### 2.2.6 impm-task-create（TL subagent）
 
-**功能描述：** 根据 PRD、架构文档和 Spec，生成任务清单。
+**功能描述：** 根据 PRD、架构文档和 SDS，生成任务清单。
 
 **输入：**
 - `docs/prds/{项目名称}-prd-v{x.x.x}.md`
 - `ARCHITECTURE.md`
-- `docs/specs/{项目名称}-spec-v{x.x.x}.md`
+- `docs/sds/{项目名称}-sds-v{x.x.x}.md`
 - `project.md`
 
 **输出：**
@@ -333,7 +333,7 @@ async function impmFlow(userInput: UserInput):
 
 **context_builder 使用方法：**
 - 启动每个 subagent 前，调用 `context_builder` 获取精简上下文
-- 上下文包含：当前任务信息、关联 UserStory、相关架构/spec 片段
+- 上下文包含：当前任务信息、关联 UserStory、相关架构/sds 片段
 
 **对应 PRD：** US-008
 
@@ -371,7 +371,7 @@ async function impmFlow(userInput: UserInput):
 
 **支持文档类型：**
 - 固定文件：`project.md`（`docType: "project"`）、`ARCHITECTURE.md`（`docType: "architect"`）
-- 版本化文件：`requirement`、`prd`、`spec`、`task`
+- 版本化文件：`requirement`、`prd`、`sds`、`task`
 
 **执行流程：**
 1. 根据 `docType` 判断文档类型
@@ -481,7 +481,7 @@ async function impmFlow(userInput: UserInput):
    - `backend` → 提取含"后端""back""api"的章节
    - `common` → 提取含"通用""common"的章节，以及总览部分
 4. **相关用户故事** — 从 PRD 文档提取与任务关联的 UserStory
-5. **技术规格** — 从 spec 文档读取完整内容
+5. **技术规格** — 从 sds 文档读取完整内容
 
 **输出格式：** Markdown 文本，各部分用 `---` 分隔
 
@@ -528,7 +528,7 @@ async function impmFlow(userInput: UserInput):
 |---------|------|
 | `requirement` | `docs/requires/` |
 | `prd` | `docs/prds/` |
-| `spec` | `docs/specs/` |
+| `sds` | `docs/sds/` |
 | `task` | `docs/tasks/` |
 | `architect` | `.`（项目根目录，文件名 ARCHITECTURE.md） |
 | `project` | `.`（项目根目录，文件名 project.md） |
@@ -663,13 +663,13 @@ interface TaskList {
 
 ```typescript
 // 文档类型常量
-type DocType = "requirement" | "prd" | "spec" | "task" | "architect" | "project"
+type DocType = "requirement" | "prd" | "sds" | "task" | "architect" | "project"
 
 // 文档类型到目录的映射（常量）
 const DOC_TYPE_DIR: Record<string, string> = {
   requirement: "docs/requires/",
   prd: "docs/prds/",
-  spec: "docs/specs/",
+  sds: "docs/sds/",
   task: "docs/tasks/",
   architect: ".",     // 项目根目录
   project: ".",       // 项目根目录
@@ -679,7 +679,7 @@ const DOC_TYPE_DIR: Record<string, string> = {
 const DOC_TYPE_PREFIX: Record<string, string> = {
   requirement: "requirement",
   prd: "prd",
-  spec: "spec",
+  sds: "sds",
   task: "task",
   architect: "ARCHITECTURE",
   project: "project",
@@ -689,7 +689,7 @@ const DOC_TYPE_PREFIX: Record<string, string> = {
 const DOC_TYPE_EXT: Record<string, string> = {
   requirement: ".md",
   prd: ".md",
-  spec: ".md",
+  sds: ".md",
   task: ".md",
   architect: ".md",
   project: ".md",
@@ -722,7 +722,7 @@ interface AnalysisResult {
 //   2. # 编码规范 — 从project.md提取的Coding Conventions
 //   3. # 相关架构设计 — 从ARCHITECTURE.md提取的相关章节
 //   4. # 相关用户故事 — 从PRD文档提取的UserStory
-//   5. # 技术规格 — 完整spec内容
+//   5. # 技术规格 — 完整sds内容
 // 各部分用 "---" 分隔
 ```
 
@@ -738,7 +738,7 @@ interface AnalysisResult {
 // 参数接口
 interface DocReaderArgs {
   projectRoot: string     // 项目根目录绝对路径
-  docType: string         // 文档类型: "requirement" | "prd" | "spec" | "task" | "architect" | "project"
+  docType: string         // 文档类型: "requirement" | "prd" | "sds" | "task" | "architect" | "project"
   version?: string        // 版本号（可选，不传则自动查找最新版本）
   projectName?: string    // 项目名称（可选，不传则从文件名推断）
 }
@@ -751,8 +751,8 @@ Promise<string>  // 文档内容（Markdown格式文本）
 - 成功：文档完整内容字符串
 - 文件不存在：描述性错误字符串（如 "project.md 文件不存在"）
 - 类型不支持：描述性错误字符串（如 "不支持的文档类型: xxx"）
-- 目录不存在：描述性错误字符串（如 "文档目录不存在: docs/specs"）
-- 未找到文档：描述性错误字符串（如 "在 docs/specs 目录下未找到 spec 类型的文档"）
+- 目录不存在：描述性错误字符串（如 "文档目录不存在: docs/sds"）
+- 未找到文档：描述性错误字符串（如 "在 docs/sds 目录下未找到 sds 类型的文档"）
 
 #### 4.1.2 impm_doc_writer
 
@@ -956,16 +956,16 @@ interface ArchitectUpdateOutput {
 }
 ```
 
-#### 4.2.5 impm-spec-create
+#### 4.2.5 impm-sds-create
 
 ```typescript
-interface SpecCreateInput {
+interface SdsCreateInput {
   prdPath: string              // PRD文档路径
   architecturePath: string     // 架构文档路径
   projectRoot: string          // 项目根目录
 }
 
-interface SpecCreateOutput {
+interface SdsCreateOutput {
   success: boolean
   message: string
   filePath: string             // 规格文档路径
@@ -978,7 +978,7 @@ interface SpecCreateOutput {
 interface TaskCreateInput {
   prdPath: string              // PRD文档路径
   architecturePath: string     // 架构文档路径
-  specPath: string             // Spec文档路径
+  sdsPath: string             // SDS文档路径
   projectRoot: string          // 项目根目录
 }
 
@@ -1139,7 +1139,7 @@ interface ImpmFlowOutput {
                                                        │
                     requirement.md ← 使用版本号命名     │
                     prd.md ← 使用同一版本号             │
-                    spec.md ← 使用同一版本号             │
+                    sds.md ← 使用同一版本号             │
                     task.md/.json ← 使用同一版本号       │
                                                        ▼
                                               流程结束，版本号固定
@@ -1195,13 +1195,13 @@ PM Agent 激活
   │  ├─ 工具：doc_reader, doc_writer
   │  └─ 输出：ARCHITECTURE.md ✓
   │
-  ├─ Step 5: [TL] impm-spec-create
+  ├─ Step 5: [TL] impm-sds-create
   │  ├─ 输入：prd-v{version}.md, ARCHITECTURE.md, project.md
   │  ├─ 工具：doc_reader, doc_writer
-  │  └─ 输出：spec-v{version}.md ✓
+│   └─ 输出：sds-v{version}.md ✓
   │
   ├─ Step 6: [TL] impm-task-create
-  │  ├─ 输入：prd-v{version}.md, ARCHITECTURE.md, spec-v{version}.md, project.md
+  │  ├─ 输入：prd-v{version}.md, ARCHITECTURE.md, sds-v{version}.md, project.md
   │  ├─ 工具：doc_reader, doc_writer
   │  └─ 输出：task-v{version}.md + task-v{version}.json ✓
   │
@@ -1246,8 +1246,8 @@ docs/
 │   └── {project}-requirement-v{x.x.x}.md
 ├── prds/              # PRD文档
 │   └── {project}-prd-v{x.x.x}.md
-├── specs/             # 技术规格说明
-│   └── {project}-spec-v{x.x.x}.md
+├── sds/             # 技术规格说明
+│   └── {project}-sds-v{x.x.x}.md
 ├── tasks/             # 任务清单
 │   ├── {project}-task-v{x.x.x}.md    (可读)
 │   └── {project}-task-v{x.x.x}.json  (可解析)
@@ -1342,7 +1342,7 @@ export function exampleFunction(paramName: string): string {
 | PM Agent 编排逻辑 | 全流程编排引擎，subagent调度 | US-001 | 高 |
 | SA subagent 配置 | project-update 和 architect-update 的Agent配置 | US-002, US-005 | 高 |
 | BA subagent 配置 | req-create 和 prd-create 的Agent配置 | US-003, US-004 | 高 |
-| TL subagent 配置 | spec-create 和 task-create 的Agent配置 | US-006, US-007 | 高 |
+| TL subagent 配置 | sds-create 和 task-create 的Agent配置 | US-006, US-007 | 高 |
 | 编码 subagent 配置 | TE/FE/BE/DE/CS/WS/TW 的Agent配置 | US-008 | 高 |
 | TW subagent 配置 | doc-update 的Agent配置 | US-009 | 中 |
 | 8个技能定义文件 | Skills 的完整定义和规则 | US-001~009 | 高 |

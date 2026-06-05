@@ -1,10 +1,10 @@
 ---
-name: impm-doc-update
+name: impm-docs-update
 description: 更新项目文档 - 生成README、部署文档等项目相关文档
 license: MIT
 ---
 
-# impm-doc-update 技能
+# impm-docs-update 技能
 
 ## 触发词
 impm-doc-update
@@ -71,10 +71,13 @@ impm-doc-update
 - Docker配置（如适用）
 - CI/CD配置
 - 环境变量模板
+- 数据库脚本
 
-### 6. 提交git
-1. 使用impm_git_helper提交所有文档变更
-2. 合并当前分支到主分支
+### 6. 生成部署脚本
+根据技术栈生成部署脚本：
+- Docker配置（如适用）
+- CI/CD配置
+- 环境变量模板
 
 ### 7. 完成流程
 返回PM agent，所有任务完成。

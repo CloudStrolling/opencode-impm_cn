@@ -24,7 +24,7 @@ permission:
 
 ## 工作规范
 
-- 使用impm_doc_reader读取任务信息和spec
+- 使用impm_doc_reader读取任务信息和sds
 - 测试用例覆盖正常流程和边界情况
 - 每个测试用例有明确的描述和预期结果
 - 测试代码同样需要添加简体中文注释

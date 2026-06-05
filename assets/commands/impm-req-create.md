@@ -16,8 +16,9 @@ subtask: false
 
 ## 操作流程
 
-1. 启动BA subagent，将用户输入传递给它
-2. BA subagent应执行impm-req-create技能：
+1. 检查当前版本号和项目名称
+2. 启动BA subagent，将用户输入和版本信息传递给它
+3. BA subagent应执行impm-req-create技能：
    - 根据用户提示词分析需求
-   - 生成带版本号的需求文档
-3. 等待BA完成后，返回结果摘要
+   - 在docs/requires/目录下生成带版本号的需求文档
+4. 等待BA完成后，返回结果摘要和文档路径

@@ -22,12 +22,12 @@ interface DocWriterArgs {
 
 /** 工具定义 */
 export const docWriterDefinition = {
-  description: "写入impm项目文档到标准路径（需求文档、PRD、spec、task、架构文档、project.md）",
+  description: "写入impm项目文档到标准路径（需求文档、PRD、sds、task、架构文档、project.md）",
   args: {
     projectRoot: { type: "string" as const, description: "项目根目录的绝对路径" },
     docType: {
       type: "string" as const,
-      description: "文档类型：requirement | prd | spec | task | architect | project",
+      description: "文档类型：requirement | prd | sds | task | architect | project",
     },
     version: { type: "string" as const, description: "版本号" },
     projectName: { type: "string" as const, description: "项目名称" },

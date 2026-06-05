@@ -1,483 +1,626 @@
 # 架构文档
 
-**项目名称：** 我是项目经理（opencode-impm）
+**项目中文名称：** OpenCode IMPM（AI项目经理）
+**项目名称：** opencode-impm
 **版本号：** v0.1.0
-**日期：** 2026-05-27
+**日期：** 2026-05-28
 
 ---
 
-## 系统架构概述
+## 1. 系统架构概述
 
-### 架构总览
+### 1.1 系统定位
 
-opencode-impm 采用 **微内核 + 事件驱动管道** 架构风格。系统以 PM Agent 作为核心编排引擎（微内核），通过标准化的**技能-工具**机制调度多个专业 subagent，按**文档交付物驱动**的顺序管道执行软件工程全流程。
+OpenCode IMPM 是一个基于 OpenCode 平台的 AI 项目经理插件，通过编排多个专业 subagent（BA、SA、TL、TE、FE/BE/DE、TW 等），按照 **TDD 驱动**和**文档驱动**的工程化方法论，自动化执行从需求分析、架构设计、任务分配、编码实现到文档生成的完整软件工程生命周期管理。
+
+### 1.2 架构风格
+
+- **选用风格：** 主从编排 + 插件化分层架构（Master-Slave Orchestration + Plugin Layered Architecture）
+- **选型理由：**
+  - PRD 中明确了"主从编排"设计理念（PM Agent 作为主控编排者）
+  - 插件化架构使每个 subagent 职责单一、独立部署/调用，符合"上下文隔离"原则
+  - 分层设计（流程编排层 → 工具层 → Agent/技能层）满足可扩展性和可维护性需求
+  - 文件系统作为唯一持久化层，无需数据库，简化部署
+
+### 1.3 架构层次图
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                       用户交互层 (User)                             │
-│                    /impm 命令 + 提示词/文档路径                     │
-└───────────────────────────┬─────────────────────────────────────────┘
-                            │
-┌───────────────────────────▼─────────────────────────────────────────┐
-│                  编排引擎层 (PM Agent - 主控)                       │
-│  ┌─────────────┬──────────────┬──────────────┬────────────────┐    │
-│  │ 流程编排     │ subagent调度  │ 上下文管理    │ 版本号/Git管理 │    │
-│  └──────┬──────┴──────┬───────┴──────┬───────┴───────┬────────┘    │
-└─────────┼─────────────┼──────────────┼───────────────┼──────────────┘
-          │             │              │               │
-┌─────────▼─────┬───────▼──────┬──────▼───────┬───────▼──────────────┐
-│  技能执行层    │   技能执行层   │  技能执行层   │    技能执行层       │
-│ (Skills)      │  (Skills)    │  (Skills)    │   (Skills)          │
-│               │              │              │                     │
-│ impm-project- │ impm-req-    │ impm-prd-    │ impm-architect-     │
-│ update        │ create       │ create       │ update              │
-│ (SA)          │ (BA)         │ (BA)         │ (SA)                │
-│               │              │              │                     │
-│ impm-spec-    │ impm-task-   │ impm-coding  │ impm-doc-update     │
-│ create        │ create       │ (多subagent)  │ (TW)               │
-│ (TL)          │ (TL)         │              │                     │
-└─────────┬─────┴───────┬──────┴──────┬───────┴──────────────────────┘
-          │             │              │
-┌─────────▼─────────────▼──────────────▼──────────────────────────────┐
-│                        工具层 (Tools - 7个核心工具)                  │
-│                                                                     │
-│  ┌─────────────┐ ┌──────────────┐ ┌──────────────┐ ┌────────────┐  │
-│  │ doc_reader  │ │ doc_writer   │ │ doc_version  │ │task_manager│  │
-│  └─────────────┘ └──────────────┘ └──────────────┘ └────────────┘  │
-│  ┌─────────────┐ ┌──────────────┐ ┌──────────────┐                 │
-│  │project_     │ │ git_helper   │ │context_      │                 │
-│  │analyzer     │ │              │ │builder       │                 │
-│  └─────────────┘ └──────────────┘ └──────────────┘                 │
-└──────────────────────────┬──────────────────────────────────────────┘
-                           │
-┌──────────────────────────▼──────────────────────────────────────────┐
-│                        资源层 (Assets)                               │
-│                                                                     │
-│  ┌─────────────┐ ┌──────────────┐ ┌──────────────┐ ┌────────────┐  │
-│  │ Agent配置    │ │ 命令定义      │ │ 技能定义      │ │ 文档模板    │  │
-│  │ (agents/)   │ │ (commands/)  │ │ (skills/)    │ │ (template/)│  │
-│  └─────────────┘ └──────────────┘ └──────────────┘ └────────────┘  │
-└──────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│                    用户交互层 (User Interface)              │
+│              OpenCode 平台 / 终端 CLI 环境                  │
+│              /impm 命令入口 + 日志输出                       │
+└──────────────────────┬───────────────────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────────────────┐
+│                  流程编排层 (Orchestration Layer)           │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │              PM Agent (主控编排者)                    │  │
+│  │  流程调度 · 状态追踪 · Subagent编排 · 生命周期管理   │  │
+│  └──────────┬──────────┬──────────┬───────────────────┘  │
+│             │          │          │                       │
+│    ┌────────▼──┐ ┌────▼────┐ ┌───▼────────┐              │
+│    │ BA        │ │  SA     │ │  TL       │  ...          │
+│    │ Subagent  │ │  Subagent│ │ Subagent  │               │
+│    └───────────┘ └─────────┘ └────────────┘               │
+└──────────────────────────────────────────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────────────────┐
+│                    工具层 (Tool Layer)                      │
+│  ┌──────────┐┌──────────┐┌──────────┐┌────────────────┐  │
+│  │doc-reader││doc-writer││doc-version││task-manager    │  │
+│  └──────────┘└──────────┘└──────────┘└────────────────┘  │
+│  ┌──────────┐┌──────────┐┌──────────┐┌────────────────┐  │
+│  │project-  ││git-helper││context- ││paths / version │  │
+│  │analyzer  ││          ││builder  ││(utils)         │  │
+│  └──────────┘└──────────┘└──────────┘└────────────────┘  │
+└──────────────────────┬───────────────────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────────────────┐
+│                  持久化层 (Persistence Layer)               │
+│  ┌──────────┐┌──────────┐┌──────────┐┌────────────────┐  │
+│  │ docs/    ││ docs/    ││ docs/    ││docs/tasks/     │  │
+│  │requires/ ││ prds/    ││ sds/   ││(.md/.json)    │  │
+│  └──────────┘└──────────┘└──────────┘└────────────────┘  │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │    .opencode/agents/ + .opencode/skills/            │  │
+│  └────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────┘
 ```
 
-### 架构核心原则
+### 1.4 核心架构特点
 
-| 原则 | 说明 |
+| 特点 | 说明 |
 |------|------|
-| **交付物驱动** | 每个步骤的输出文档是下一步骤的唯一输入依赖，形成完整文档链 |
-| **上下文隔离** | 每个 subagent 只接收本步骤必要的最小上下文，减少AI幻觉 |
-| **单向管道** | 流程单向推进：需求 → PRD → 架构 → Spec → 任务 → 编码 → 文档 |
-| **TDD先行** | 测试先于实现，红-绿-重构循环保证代码质量 |
-| **标准工具** | 7个核心工具通过 OpenCode SDK 注册，对 Agent 和 Subagent 统一可用 |
+| 主从编排 | PM Agent 作为单一主控，按依赖顺序调度 subagent，确保流程有序执行 |
+| 文档驱动 | 每个阶段产出标准化文档，作为下一阶段的输入，信息可追溯 |
+| 上下文隔离 | 每个子任务使用独立的 subagent 上下文，由 context-builder 按需构建 |
+| 工具化设计 | 所有功能封装为独立工具函数，通过 OpenCode Tool API 注册调用 |
+| 无外部依赖 | 仅使用 Node.js 内置模块（fs、path、child_process），保持轻量 |
+| 文件即存储 | 所有数据以 Markdown/JSON 文件形式存储在 docs/ 目录，无需数据库 |
 
 ---
 
-## 模块设计
+## 2. 模块设计
 
-### 模块1: 编排引擎层 — PM Agent
+### 2.1 流程编排层 — PM Agent（主控编排者）
 
-- **职责：** 系统主控，负责全流程编排、subagent调度、上下文管理、Git/版本号管理
-- **依赖：** 所有7个核心工具、12个 subagent 配置
-- **接口：**
-  - 接收 `/impm` 命令参数（提示词/文档路径）
-  - 调用 `impm_doc_version` 获取/计算版本号
-  - 调用 `impm_git_helper` 执行Git操作
-  - 调用 `impm_task_manager` 管理任务状态
-  - 按流程顺序启动各 subagent
-  - 返回进度信息和最终结果给用户
-- **实现位置：** `assets/agents/pm.md`
+- **职责：**
+  - 接收 `/impm` 命令参数，初始化项目环境（Git 分支创建、文档目录初始化）
+  - 按预定义流程编排 subagent 调用顺序（BA → SA → TL → 编码 → TW）
+  - 跟踪任务状态，管理任务依赖关系
+  - 处理异常和中断，提供日志输出让用户了解进度
+  - 不负责具体文档生成、编码或测试执行
+- **依赖：** 所有工具层模块、所有 subagent 技能
+- **接口：** 通过 OpenCode Command API 注册 `/impm` 命令；通过 OpenCode Agent API 调度 subagent
+- **说明：** 作为运行时的流程引擎，PM Agent 的配置定义在 `.opencode/agents/pm-agent.md`
 
-### 模块2: 技能执行层 — Skills（8个技能）
+### 2.2 流程编排层 — Subagent 体系
 
-每个技能封装了一个完整的工程步骤，由对应的 subagent 执行：
+每个 Subagent 对应于一个专业角色，配置定义在 `.opencode/agents/` 目录：
 
-| 技能名称 | Subagent | 输入 | 输出 |
-|---------|----------|------|------|
-| `impm-project-update` | SA | 项目目录 | `project.md` |
-| `impm-req-create` | BA | 用户提示词/需求文档 | `docs/requires/requirement-v*.md` |
-| `impm-prd-create` | BA | requirement.md, project.md | `docs/prds/prd-v*.md` |
-| `impm-architect-update` | SA | prd.md, project.md | `ARCHITECTURE.md` |
-| `impm-spec-create` | TL | prd.md, ARCHITECTURE.md, project.md | `docs/specs/spec-v*.md` |
-| `impm-task-create` | TL | prd.md, ARCHITECTURE.md, project.md, spec.md | `docs/tasks/task-v*.md/.json` |
-| `impm-coding` | CS+WS+TE+FE/BE/DE+TW | 任务ID + 相关文档片段 | 实现代码 + 测试 + 注释 |
-| `impm-doc-update` | TW | project.md + 构建产物 | README, 部署文档等 |
+| Subagent | 角色 | 核心技能 | 输入 | 输出 |
+|----------|------|---------|------|------|
+| BA | 商业分析师 | impm-req-create, impm-prd-create | 用户提示词 + project.md | 需求文档、PRD 文档 |
+| SA | 软件架构师 | impm-project-update, impm-architect-update | PRD + project.md | project.md、architecture.md |
+| TL | 技术主管 | impm-sds-create, impm-task-create | PRD + architecture.md | sds 文档、任务清单(MD+JSON) |
+| CS | 代码搜索 | 本地代码库查询 | 任务信息 | 相关代码上下文 |
+| WS | 网络搜索 | 三方库/中间件文档查询 | 技术查询需求 | 官方文档信息 |
+| TE | 测试工程师 | 测试用例编写与执行 | 上下文 + sds | 测试代码、测试结果 |
+| DE/FE/BE | 开发工程师 | TDD 驱动编码实现 | 测试 + 上下文 | 实现代码 |
+| TW | 技术写作 | impm-doc-update | 已完成代码 | README、注释、部署文档 |
 
-- **职责：** 封装每个工程步骤的完整逻辑，定义输入输出规范
-- **依赖：** 7个核心工具（技能内部调用）
-- **配置位置：** `assets/skills/`
+- **职责：** 每个 Subagent 负责在自己的专业领域内执行特定技能，不跨域操作
+- **依赖：** 依赖工具层提供的各种工具函数完成具体操作
+- **说明：** Subagent 之间不直接通信，全部通过 PM Agent 编排调度，保证上下文隔离
 
-### 模块3: 工具层 — 7个核心工具（Tool）
+### 2.3 工具层 — 文档管理工具集
 
-| 工具 | 职责 | 关键能力 |
-|------|------|---------|
-| **impm_doc_reader** | 从标准路径读取各类文档 | 自动查找最新版本、推断项目名称 |
-| **impm_doc_writer** | 将内容写入标准路径 | 自动创建目录、task类型双格式写入 |
-| **impm_doc_version** | 版本号管理 | 获取最新版本、计算下一版本、格式校验 |
-| **impm_task_manager** | 任务状态管理 | 初始化/查询/更新任务（.json持久化） |
-| **impm_project_analyzer** | 项目结构分析 | 递归扫描、多语言函数提取、生成Project Map |
-| **impm_git_helper** | Git操作封装 | 分支创建/切换/提交/合并/状态查询 |
-| **impm_context_builder** | 编码上下文构建 | 按任务ID提取PRD/架构/spec相关片段 |
+#### doc-reader（文档读取工具）
+- **职责：** 从标准路径读取项目文档，自动处理版本号查找和项目名称推断
+- **依赖：** utils/paths（路径常量）、utils/version（版本号解析）
+- **接口：** `docReaderExecute(args)` — 根据文档类型和版本号读取对应文件内容
 
-- **职责：** 提供底层原子化能力，供所有 Agent/Subagent 调用
-- **依赖：** `src/utils/` 下的工具函数
-- **实现位置：** `src/tools/`
+#### doc-writer（文档写入工具）
+- **职责：** 将生成的文档内容写入标准路径，自动创建不存在的目录，采用原子写入防止中断
+- **依赖：** utils/paths
+- **接口：** `docWriterExecute(args)` — 执行文档写入，返回写入结果消息
 
-### 模块4: 资源层 — Assets & 配置
+#### doc-version（版本号管理工具）
+- **职责：** 获取当前最新版本号或计算下一个版本号
+- **依赖：** utils/version
+- **接口：** `docVersionExecute(args)` — 执行版本号管理操作，返回版本号字符串
 
-- **职责：** 存放 subagent 定义、命令定义、技能定义和文档模板
-- **目录结构：**
-  - `assets/agents/` — 12个 subagent 的提示词/配置（PM + 11 subagent）
-  - `assets/commands/` — `/impm` 及8个子命令定义
-  - `assets/skills/` — 8个技能的完整定义和规则
+### 2.4 工具层 — 任务与上下文管理
 
-### 模块5: 工具函数层 — Utilities
+#### task-manager（任务状态管理工具）
+- **职责：** 初始化、查询、更新任务清单的状态，支持主任务和子任务的层级管理
+- **依赖：** utils/paths、doc-reader
+- **接口：** `taskManagerExecute(args)` — 执行任务管理操作（初始化/查询/更新）
 
-| 模块 | 职责 | 关键接口 |
-|------|------|---------|
-| `src/utils/git.ts` | Git底层命令封装 | `gitExec()`, `createBranch()`, `commit()`, `mergeBranch()`, `getStatus()` |
-| `src/utils/paths.ts` | 路径与文件名管理 | `getDocFileName()`, `getDocFilePath()`, `getTaskJsonPath()` |
-| `src/utils/version.ts` | 语义化版本号管理 | `parseVersion()`, `compareVersions()`, `incrementPatch()`, `isValidVersion()` |
+#### context-builder（上下文构建工具）
+- **职责：** 根据任务类型和编号，从 PRD、架构文档、sds 等中提取相关片段，构建精简上下文
+- **依赖：** doc-reader
+- **接口：** `contextBuilderExecute(args)` — 执行上下文构建，返回组合文档内容
 
----
+### 2.5 工具层 — 项目分析与版本控制
 
-## 技术选型
+#### project-analyzer（项目分析工具）
+- **职责：** 扫描项目源代码文件，按目录层级分组，提取文件描述和函数/类列表，生成 Project Map
+- **依赖：** utils/paths
+- **接口：** `projectAnalyzerExecute(args)` — 执行项目分析，返回 Markdown 格式项目地图
 
-| 领域 | 技术方案 | 理由 |
-|------|---------|------|
-| **运行环境** | Node.js >= 18.0.0 | OpenCode 平台依赖，ESM 原生支持 |
-| **编程语言** | TypeScript 5.x（严格模式） | 类型安全、IDE支持好、与OpenCode SDK类型对齐 |
-| **模块系统** | ESM（编译为 CommonJS） | 开发时ESM便捷，运行时兼容Node.js |
-| **包管理** | npm | OpenCode平台默认包管理器 |
-| **构建工具** | tsc（TypeScript Compiler） | 项目轻量，无需复杂构建配置 |
-| **数据验证** | zod | OpenCode SDK推荐方案，类型推导强 |
-| **YAML解析** | yaml (js-yaml) | 技能和Agent配置采用YAML格式 |
-| **SDK** | @opencode-ai/sdk + @types/node | OpenCode平台标准开发依赖 |
-| **插件接口** | @opencode-ai/plugin | 插件注册工具的定义规范 |
-| **版本控制** | Git | 行业标准，OpenCode内置支持 |
-| **Agent机制** | OpenCode Agent + SubAgent | 平台核心能力，支持agent嵌套协作 |
-| **文档格式** | Markdown + JSON | 人类可读与机器可解析双通道 |
+#### git-helper（Git 操作工具）
+- **职责：** 封装 impm 流程中需要的 Git 操作（创建分支、提交、合并、状态查询等）
+- **依赖：** utils/git
+- **接口：** `gitHelperExecute(args)` — 根据 action 类型分发到不同的 Git 命令
 
----
+### 2.6 通用工具层 (utils)
 
-## 数据流
+#### utils/paths — 路径常量与工具函数
+- **职责：** 定义 impm 使用的所有标准目录路径和文件命名规则
+- **接口：** `getDocFileName()`, `getDocFilePath()`, `getTaskJsonPath()` 等
 
-### 全流程数据流
+#### utils/version — 版本号工具函数
+- **职责：** 语义化版本号的解析、比较、递增操作
+- **接口：** `parseVersion()`, `formatVersion()`, `incrementPatch()`, `compareVersions()` 等
 
-```
-用户输入提示词/文档路径
-       │
-       ▼
-┌──────────────────────────────────────────────────────────────┐
-│                    PM Agent 主流程编排                        │
-├──────────────────────────────────────────────────────────────┤
-│                                                              │
-│  第1步: [SA] impm-project-update                             │
-│    输入: 用户提示词, 项目目录                                │
-│    工具: impm_project_analyzer, impm_doc_writer              │
-│    输出: project.md                                          │
-│                                                              │
-│  第2步: [BA] impm-req-create                                │
-│    输入: 用户提示词, 引用的需求文档                          │
-│    工具: impm_doc_reader, impm_doc_version, impm_doc_writer  │
-│    输出: docs/requires/requirement-v*.md                     │
-│                                                              │
-│  第3步: [BA] impm-prd-create                                │
-│    输入: requirement-v*.md, project.md                       │
-│    工具: impm_doc_reader, impm_doc_writer                    │
-│    输出: docs/prds/prd-v*.md                                 │
-│                                                              │
-│  第4步: [SA] impm-architect-update                          │
-│    输入: prd-v*.md, project.md                               │
-│    工具: impm_doc_reader, impm_doc_writer                    │
-│    输出: ARCHITECTURE.md                                     │
-│                                                              │
-│  第5步: [TL] impm-spec-create                               │
-│    输入: prd-v*.md, ARCHITECTURE.md, project.md              │
-│    工具: impm_doc_reader, impm_doc_writer                    │
-│    输出: docs/specs/spec-v*.md                               │
-│                                                              │
-│  第6步: [TL] impm-task-create                               │
-│    输入: prd-v*.md, ARCHITECTURE.md, spec-v*.md, project.md  │
-│    工具: impm_doc_reader, impm_doc_writer                    │
-│    输出: docs/tasks/task-v*.md + docs/tasks/task-v*.json     │
-│                                                              │
-│  ┌─────────────────────────────────────────────────────┐     │
-│  │  第7步: [impm-coding] 按任务逐一执行（循环）        │     │
-│  │                                                     │     │
-│  │  7a. [CS] 搜索本地相关代码                          │     │
-│  │  7b. [WS] 搜索三方包/中间件文档                     │     │
-│  │  7c. [TE] 编写测试用例和测试代码                    │     │
-│  │  7d. [FE/BE/DE] 编写实现代码（任务类型决定）       │     │
-│  │  7e. [TE] 验证测试是否通过                          │     │
-│  │  7f. [循环] 测试失败→重新编码→再测试               │     │
-│  │  7g. [TW] 添加代码注释                              │     │
-│  │  7h. 提交代码到Git，更新任务状态                    │     │
-│  └─────────────────────────────────────────────────────┘     │
-│                                                              │
-│  第8步: [TW] impm-doc-update                               │
-│    输入: project.md, 构建产物                               │
-│    工具: impm_git_helper                                    │
-│    输出: README.md, 部署文档, 环境配置等                    │
-│                                                              │
-│  第9步: Git合并分支 & 返回最终结果                          │
-│                                                              │
-└──────────────────────────────────────────────────────────────┘
-```
+#### utils/git — Git 操作函数集
+- **职责：** 基于 `child_process.execSync` 封装常用 Git 命令
+- **接口：** `isGitRepo()`, `createBranch()`, `commit()`, `mergeBranch()` 等
 
-### 编码子流程数据流（impm-coding 内部）
+### 模块关系图
 
 ```
-┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
-│ CS Agent │    │ WS Agent │    │ TE Agent │    │FE/BE/DE  │
-│  (搜索)   │    │  (搜索)   │    │  (测试)   │    │ (编码实现)│
-└────┬─────┘    └────┬─────┘    └────┬─────┘    └────┬─────┘
-     │               │               │               │
-     │ 本地代码搜索   │ 三方包文档    │ 测试用例      │ 实现代码    │
-     │               │               │               │
-     ▼               ▼               ▼               ▼
-   ┌──────────────────────────────────────────────────────┐
-   │               context_builder 工具                    │
-   │  从 PRD/架构/spec 中提取与 taskId 相关的片段          │
-   └──────────────────────────────────────────────────────┘
+PM Agent (编排调度)
+  │
+  ├──→ BA Subagent ──→ impm-req-create / impm-prd-create
+  │                         │
+  │                         └──→ [doc-reader, doc-writer, doc-version]
+  │
+  ├──→ SA Subagent ──→ impm-project-update / impm-architect-update
+  │                         │
+  │                         ├──→ [project-analyzer]
+  │                         └──→ [doc-reader, doc-writer]
+  │
+  ├──→ TL Subagent ──→ impm-sds-create / impm-task-create
+  │                         │
+  │                         └──→ [task-manager, doc-writer]
+  │
+  ├──→ CS/WS Subagent ──→ 代码搜索 / 网络文档查询
+  │
+  ├──→ TE Subagent ────→ 测试用例编写与执行
+  │                         │
+  │                         └──→ [context-builder]
+  │
+  ├──→ DE/FE/BE Subagent ──→ TDD 编码实现
+  │                             │
+  │                             └──→ [context-builder, git-helper]
+  │
+  └──→ TW Subagent ──→ impm-doc-update
                             │
-                            ▼
-   ┌──────────────────────────────────────────────────────┐
-   │         精简上下文（仅包含本次任务所需）              │
-   │  · 关联的 UserStory 描述                             │
-   │  · 相关架构章节                                      │
-   │  · 技术规格中对应模块的接口定义                      │
-   │  · CS/WS 搜索到的参考代码和文档                      │
-   │  · 任务验收标准和测试方法                            │
-   └──────────────────────────────────────────────────────┘
-```
-
-### 上下文隔离数据流
-
-```
-步骤A (SA)               步骤A输出                 步骤B (BA)
-┌──────────┐     ┌──────────────────┐     ┌──────────┐
-│project.md│────▶│  Standard Doc    │────▶│requirement│
-└──────────┘     └──────────────────┘     └──────────┘
-                    仅传递文档本身             仅读取文档
-                    无项目全局上下文             无多余信息
+                            └──→ [git-helper, doc-writer]
 ```
 
 ---
 
-## 目录结构规范
+## 3. 技术选型
+
+### 3.1 技术栈全景
+
+| 领域 | 技术方案 | 版本要求 | 选型理由 |
+|------|---------|---------|---------|
+| 编程语言 | TypeScript | ≥ 5.0 | 类型安全、支持 ESM、OpenCode 平台原生语言 |
+| 运行环境 | Node.js | ≥ 18.0 | 跨平台、内置 fs/path/child_process 模块 |
+| 模块系统 | ESM (ECMAScript Modules) | — | 现代标准、与 Node.js 18+ 原生支持一致 |
+| 框架/平台 | OpenCode Plugin API | — | 作为 OpenCode 插件运行，注册 Command 和 Tool |
+| 数据存储 | 文件系统 (Markdown + JSON) | — | 零外部依赖，文档即存储，满足需求 |
+| 测试框架 | Node.js 内置 test runner / Vitest | — | 轻量、零配置、与 ESM 兼容 |
+| 文档格式 | Markdown + JSON | — | Markdown 人类可读，JSON 机器可处理 |
+| 版本号规范 | 语义化版本 (SemVer) | v0.1.0 起 | 业界标准、支持自动递增 |
+| 部署方式 | OpenCode 插件（源码安装/npm 包） | — | 随 OpenCode 运行时自动加载，无需独立部署 |
+
+### 3.2 架构决策记录（ADR）
+
+| ADR编号 | 决策内容 | 选项对比 | 最终选择 | 理由 | 后果/权衡 |
+|---------|---------|---------|---------|------|----------|
+| ADR-001 | 数据持久化方案 | 文件系统 vs SQLite vs JSON 数据库 | 文件系统（Markdown + JSON） | 保持零外部依赖；文档即产品的设计理念；降低部署和版本管理复杂度 | 不支持复杂查询和高并发；数据一致性依赖文件写入原子操作 |
+| ADR-002 | 模块间通信方式 | 函数直接调用 vs 消息队列 vs HTTP IPC | 函数直接调用（同进程） | 所有工具/Agent 在 OpenCode 同进程内运行；函数调用延迟最低；无序列化开销 | 不适用于跨进程部署；模块间存在隐式耦合 |
+| ADR-003 | 外部依赖策略 | 最小化内置模块 vs 引入第三方库 | 仅使用 Node.js 内置模块 | 零外部依赖降低维护成本和漏洞风险；满足所有功能需求 | 部分功能需要手动实现（如 SemVer 解析、文件 glob） |
+| ADR-004 | 技能与工具的交互方式 | OpenCode Tool API vs 自定义 RPC | OpenCode Tool API | 与 OpenCode 平台深度集成；统一工具注册和调用机制 | 平台版本变化可能影响工具接口；无法脱离 OpenCode 独立运行 |
+| ADR-005 | 任务清单格式 | 纯 Markdown vs JSON vs MD+JSON 双格式 | MD + JSON 双格式共存 | MD 给人阅读，JSON 给程序处理；task-manager 以 JSON 为状态源，渲染为 MD | 两份数据需保持同步；写入时需同时更新两个文件 |
+
+---
+
+## 4. 数据流
+
+### 4.1 核心业务数据流
+
+```
+用户输入提示词
+    │
+    ▼
+┌─────────────────────────────────────────────────┐
+│ PM Agent 初始化流程                               │
+│ 1. 创建 Git 分支 (impm/{功能}-{时间戳})            │
+│ 2. 初始化 docs/ 目录结构 (如不存在)                │
+│ 3. 更新 project.md                                │
+└─────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────┐
+│ BA Subagent — 需求分析阶段                        │
+│ 1. 执行 impm-req-create → 生成需求文档            │
+│ 2. 执行 impm-prd-create  → 生成 PRD 文档          │
+│ 输出: docs/requires/ , docs/prds/                 │
+└─────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────┐
+│ SA Subagent — 架构设计阶段                        │
+│ 1. 执行 impm-project-update → 更新 project.md    │
+│ 2. 执行 impm-architect-update → 生成 architecture│
+│ 输出: docs/architecture.md                       │
+└─────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────┐
+│ TL Subagent — 规格与任务阶段                      │
+│ 1. 执行 impm-sds-create  → 生成技术规格说明      │
+│ 2. 执行 impm-task-create  → 生成任务清单(MD+JSON) │
+│ 输出: docs/sds/ , docs/tasks/                   │
+└─────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────┐
+│ PM Agent — 编码执行阶段（按任务依赖顺序循环）       │
+│                                                 │
+│ 对每个"未完成"的任务：                             │
+│   1. CS Subagent → 搜索本地相关代码               │
+│   2. WS Subagent → 查询三方包文档               │
+│   3. context-builder → 构建精简上下文             │
+│   4. TE Subagent → 编写测试用例和测试代码         │
+│   5. DE/FE/BE Subagent → TDD 编码实现            │
+│      (测试失败 → 回退重试，最多3次)               │
+│   6. git-helper → 提交代码到当前分支              │
+│   7. 更新任务状态 → 标记为"已完成"                │
+└─────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────┐
+│ TW Subagent — 文档生成阶段                        │
+│ 1. 执行 impm-doc-update → 生成 README/部署文档    │
+│ 2. 添加代码注释                                   │
+│ 3. git-helper → 提交文档变更                      │
+└─────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────┐
+│ PM Agent — 完成阶段                               │
+│ 1. 合并 Git 分支 → 主分支 (或创建 PR)             │
+│ 2. 输出完成报告                                    │
+└─────────────────────────────────────────────────┘
+```
+
+### 4.2 模块间数据流转
+
+| 发送方 | 接收方 | 数据内容 | 传递方式 |
+|--------|--------|---------|---------|
+| PM Agent | BA Subagent | 用户提示词、project.md | OpenCode Agent API + 上下文注入 |
+| BA Subagent | PM Agent | 需求文档路径、PRD 路径 | 文件写入后返回路径 |
+| PM Agent | SA Subagent | PRD 路径、project.md | 上下文注入 |
+| SA Subagent | PM Agent | architecture.md 路径 | 文件写入后返回路径 |
+| PM Agent | TL Subagent | PRD + architecture 路径 | 上下文注入 |
+| TL Subagent | PM Agent | sds 路径、task 路径 | 文件写入后返回路径 |
+| PM Agent | CS/WS Subagent | 任务编号、关键词 | 上下文注入 |
+| PM Agent | context-builder | 任务编号、任务类型 | 函数调用 |
+| context-builder | TE/DE Subagent | 精简文档上下文 | 函数返回值 |
+| TE/DE Subagent | git-helper | Git 命令参数 | 函数调用 |
+| DE Subagent | PM Agent | 编码结果（通过/失败） | 返回结果消息 |
+| PM Agent | task-manager | 更新任务状态请求 | 函数调用 |
+| TW Subagent | git-helper | Git 提交参数 | 函数调用 |
+
+### 4.3 数据存储流转
+
+| 数据类型 | 产生阶段 | 存储位置 | 消费阶段 | 生命周期 |
+|---------|---------|---------|---------|---------|
+| 需求文档 (.md) | BA 需求分析 | docs/requires/ | PRD 生成、架构设计 | 持久化至归档 |
+| PRD 文档 (.md) | BA PRD 生成 | docs/prds/ | 架构设计、sds 生成 | 持久化至归档 |
+| project.md | SA 项目更新 | docs/ | 所有阶段 | 持续更新 |
+| architecture.md | SA 架构设计 | docs/ | sds 生成、编码 | 持久化至归档 |
+| 技术规格 (.md) | TL sds 生成 | docs/sds/ | 任务生成、编码 | 持久化至归档 |
+| 任务清单 (.md/.json) | TL 任务生成 | docs/tasks/ | 编码执行、状态追踪 | 持续更新至完成 |
+| 构建上下文 (内存) | context-builder | 运行时内存 | 编码任务执行 | 任务完成后销毁 |
+| 源代码 (Code) | DE/FE/BE 编码 | src/ 及各子目录 | 编译运行 | 持续演进 |
+| Git 工作树 | Git 操作 | .git/ | 分支管理、版本控制 | 项目完整生命周期 |
+
+---
+
+## 5. 数据架构
+
+### 5.1 数据模型概览
+
+项目采用**文件即数据**模式，无数据库或 ORM。核心数据模型通过文件系统中的三种形式表达：
+
+```
+1. 结构化文档 (Markdown)
+   ├── 需求文档（标准章节结构）
+   ├── PRD 文档（UserStory + 验收标准 + 非功能需求）
+   ├── 架构文档（模块划分 + 技术选型 + 数据流）
+   ├── 技术规格文档（接口定义 + 数据模型 + 约束）
+   └── 项目信息文档（Project Info + Coding Conventions + Project Map）
+
+2. 结构化数据 (JSON)
+   └── 任务清单 JSON（任务状态、依赖、验收标准）— 程序的主要处理对象
+
+3. 配置定义 (Markdown/YAML)
+   ├── Agent 配置 (.opencode/agents/*.md)
+   └── 技能定义 (.opencode/skills/*/SKILL.md)
+```
+
+### 5.2 存储策略
+
+| 数据类型 | 存储方案 | 理由 | 一致性要求 |
+|---------|---------|------|-----------|
+| 工程文档 | 文件系统 (Markdown) | 人类可读、版本可追溯、零依赖 | 最终一致性（Git 提交后才生效） |
+| 任务状态 | 文件系统 (JSON) | 机器可解析、易读易写、task-manager 统一管理 | 强一致性（单文件写入，原子操作） |
+| 源代码 | 文件系统 (.ts/.js) | 标准开发实践、Git 版本控制 | 强一致性（Git 提交事务） |
+| 运行时上下文 | 内存 | 临时的任务上下文，任务完成后无需持久化 | 无（临时数据） |
+| 配置定义 | 文件系统 (Markdown) | 与 OpenCode 平台规范一致 | 最终一致性 |
+
+### 5.3 数据一致性策略
+
+- **原子写入**：文档写入采用"先写临时文件，再重命名"策略，防止写入中断导致文件损坏
+- **Git 事务**：每个任务完成后的代码提交作为一个完整事务，保证源代码和文档的一致性
+- **JSON 状态源**：任务状态以 JSON 文件为准，MD 文件由 task-manager 渲染生成，避免双源不一致
+- **无并发写**：IMPM 流程为单线程串行执行，不存在并发写入冲突，简化一致性模型
+
+---
+
+## 6. 接口设计
+
+### 6.1 外部接口
+
+| 接口名称 | 协议 | 路径/主题 | 认证方式 | 调用方 |
+|---------|------|----------|---------|--------|
+| `/impm` 命令 | OpenCode Command API | `opencode-impm` 插件注册 | OpenCode 平台认证 | 终端用户 |
+| 工具注册表 | OpenCode Tool API | `tools` 属性 | OpenCode 平台注入 | PM Agent / Subagent |
+
+### 6.2 内部接口（工具函数接口）
+
+所有工具通过 OpenCode Tool API 注册，采用统一的接口模式：
+
+| 工具名称 | 输入参数 | 输出格式 | 调用方 |
+|---------|---------|---------|--------|
+| doc-reader | `{ type: string, version?: string, projectName?: string }` | `{ content: string, version: string, filePath: string }` | BA/SA/TL Subagent |
+| doc-writer | `{ type: string, content: string, version: string, projectName?: string }` | `{ message: string, filePath: string, version: string }` | BA/SA/TL/TW Subagent |
+| doc-version | `{ type: string, action: 'latest' \| 'next', projectName?: string }` | `{ version: string }` | BA/SA/TL Subagent |
+| task-manager | `{ action: 'init' \| 'query' \| 'update', taskId?: string, status?: string }` | `{ result: string, taskList?: object }` | PM Agent |
+| project-analyzer | `{ projectRoot: string }` | `{ content: string, fileCount: number }` | SA Subagent |
+| git-helper | `{ action: string, ...args }` | `{ message: string, success: boolean }` | PM Agent / TW Subagent |
+| context-builder | `{ taskId: string, taskType: string, projectName: string }` | `{ context: string }` | PM Agent |
+
+### 6.3 接口契约示例
+
+```typescript
+// 工具函数统一接口模式
+interface ToolDefinition {
+  name: string;             // 工具名称，如 "doc-reader"
+  description: string;      // 工具功能描述
+  parameters: {             // JSON Schema 参数定义
+    type: 'object';
+    properties: Record<string, SchemaProperty>;
+    required?: string[];
+  };
+}
+
+interface SchemaProperty {
+  type: 'string' | 'number' | 'boolean' | 'object';
+  description: string;
+  required?: boolean;
+}
+
+// doc-reader 请求/响应定义
+interface DocReaderArgs {
+  type: string;         // 文档类型: 'requirement' | 'prd' | 'sds' | 'task'
+  version?: string;     // 版本号，可选。不传则查找最新版
+  projectName?: string; // 项目名称，可选。不传则自动推断
+}
+
+interface DocReaderResult {
+  content: string;      // 文档内容
+  version: string;      // 实际读取的版本号
+  filePath: string;     // 文件绝对路径
+}
+
+// doc-writer 请求/响应定义
+interface DocWriterArgs {
+  type: string;         // 文档类型
+  content: string;      // 文档内容（Markdown 格式）
+  version: string;      // 版本号
+  projectName?: string; // 项目名称
+}
+
+interface DocWriterResult {
+  message: string;      // 操作结果消息
+  filePath: string;     // 写入的文件路径
+  version: string;      // 写入的版本号
+}
+```
+
+---
+
+## 7. 非功能性需求落地（NFR Implementation）
+
+| PRD-NFR 编号 | 非功能性需求 | 架构决策 | 量化指标 |
+| --------- | -------- | ------------- | -------------- |
+| NFR-4.1-1 | 文档读取工具响应时间 < 500ms | 使用 fs.readFileSync 直接读取本地文件，无网络开销 | 响应时间 < 50ms（本地 SSD） |
+| NFR-4.1-2 | 项目分析工具扫描100个文件 < 30s | 递归扫描使用同步 fs 操作，无异步调度开销 | 100 文件扫描 < 5s |
+| NFR-4.1-3 | Subagent 上下文构建 < 5s | 仅读取关联文档的必要片段，不做全量加载 | 上下文构建 < 2s |
+| NFR-4.2-1 | 所有内容使用简体中文 | 模板和工具函数预设中文文案 | 用户可见信息 100% 中文 |
+| NFR-4.2-2 | 错误信息清晰指明问题和方案 | 统一错误处理规范，返回中文错误消息 | 错误信息包含"原因 + 解决方案" |
+| NFR-4.2-3 | 每一步都有日志输出 | PM Agent 在流程节点添加 console.log 输出 | 每个阶段至少 1 条进度日志 |
+| NFR-4.3-1 | 原子写入防止文件损坏 | doc-writer 采用临时文件 + rename 策略 | 写入中断不产生损坏文件 |
+| NFR-4.3-2 | 版本号并发安全 | IMPM 流程单线程串行，无并发写场景 | 不产生重复版本号 |
+| NFR-4.3-3 | 网络搜索超时机制 | WS Subagent 添加 30s 超时控制 | 超时后返回错误而非卡死 |
+| NFR-4.4-1 | 不读取 .env/credentials 敏感文件 | project-analyzer 配置排除列表 | 扫描排除 .env, credentials, *.key |
+| NFR-4.4-2 | Git 操作不存储用户凭证 | 依赖系统 Git 认证，不读写 .git-credentials | 不涉及凭证存储 |
+| NFR-4.4-3 | 网络搜索不发送项目代码 | WS 仅发送关键词/包名，不发送源代码 | 无代码泄露风险 |
+| NFR-4.5-1 | 代码遵循统一编码规范 | project.md 定义完整编码规范（2空格、camelCase、ESM） | 代码审查通过率 100% |
+| NFR-4.5-2 | 公共 API 使用 JSDoc 注释 | 编码规范强制要求，技能模板中嵌入注释模板 | 公共函数 100% 有 JSDoc |
+| NFR-4.5-3 | 工具函数返回错误消息而非抛异常 | 统一错误处理规范，所有工具函数 catch 异常后返回消息字符串 | 不抛出未捕获异常 |
+
+---
+
+## 8. 目录结构
 
 ```
 opencode-impm/
-│
-├── ARCHITECTURE.md              # 架构文档（本文件）       ← SA 生成
-├── project.md                   # 项目信息/编码规范/文件地图 ← SA 生成
-├── package.json                 # Node.js 包配置
-├── tsconfig.json                # TypeScript 编译配置
-├── .gitignore                   # Git 忽略规则
-│
-├── src/                         # 源代码目录
-│   ├── index.ts                 # 插件入口，注册7个工具
-│   │
-│   ├── tools/                   # 工具层实现
-│   │   ├── doc-reader.ts        # 文档读取工具
-│   │   ├── doc-writer.ts        # 文档写入工具
-│   │   ├── doc-version.ts       # 版本号管理工具
-│   │   ├── task-manager.ts      # 任务状态管理工具
-│   │   ├── project-analyzer.ts  # 项目结构分析工具
-│   │   ├── git-helper.ts        # Git操作封装工具
-│   │   └── context-builder.ts   # 编码上下文构建工具
-│   │
-│   └── utils/                   # 工具函数层
-│       ├── git.ts               # Git底层命令封装
-│       ├── paths.ts             # 路径与文件名管理
-│       └── version.ts           # 语义化版本号管理
-│
-├── assets/                      # 资源文件（Agent/命令/技能配置）
-│   ├── agents/                  # 12个Agent/SubAgent的配置与提示词
-│   │   ├── pm.md                # PM Agent - 主编排器
-│   │   ├── ba.md                # BA - 业务分析师
-│   │   ├── sa.md                # SA - 软件架构师
-│   │   ├── tl.md                # TL - 技术负责人
-│   │   ├── te.md                # TE - 测试工程师
-│   │   ├── fe.md                # FE - 前端工程师
-│   │   ├── be.md                # BE - 后端工程师
-│   │   ├── de.md                # DE - 通用开发工程师
-│   │   ├── cs.md                # CS - 代码搜索
-│   │   ├── ws.md                # WS - 网络搜索
-│   │   ├── tw.md                # TW - 技术写手
-│   │   └── dba.md               # DBA - 数据库管理员
-│   │
-│   ├── commands/                # 命令定义
-│   │   ├── impm.md              # /impm 主命令
-│   │   └── impm-*.md            # 子命令定义
-│   │
-│   └── skills/                  # 技能定义（8个技能）
-│       ├── impm-project-update/
-│       ├── impm-req-create/
-│       ├── impm-prd-create/
-│       ├── impm-architect-update/
-│       ├── impm-spec-create/
-│       ├── impm-task-create/
-│       ├── impm-coding/
-│       └── impm-doc-update/
-│
-├── template/                    # 文档模板
-│   └── PROJECT-TEMPLATE.MD      # project.md 生成模板
-│
-├── docs/                        # 项目文档目录（运行时生成）
-│   ├── requires/                # 需求文档
-│   ├── prds/                    # PRD文档
-│   ├── specs/                   # 技术规格说明
-│   └── tasks/                   # 任务清单 (.md + .json)
-│
-└── scripts/                     # 安装/部署脚本
-    ├── install.ps1              # Windows安装脚本
-    └── install.mjs              # 通用安装脚本
+├── .opencode/                          # OpenCode 平台配置目录
+│   ├── agents/                         # Agent 配置（Subagent 定义）
+│   │   ├── pm-agent.md                 # PM Agent 主控编排者
+│   │   ├── ba-subagent.md              # BA 商业分析 Agent
+│   │   ├── sa-subagent.md              # SA 软件架构 Agent
+│   │   ├── tl-subagent.md              # TL 技术主管 Agent
+│   │   ├── de-subagent.md              # DE 通用开发 Agent
+│   │   ├── fe-subagent.md              # FE 前端开发 Agent
+│   │   ├── be-subagent.md              # BE 后端开发 Agent
+│   │   ├── te-subagent.md              # TE 测试 Agent
+│   │   ├── cs-subagent.md              # CS 代码搜索 Agent
+│   │   ├── ws-subagent.md              # WS 网络搜索 Agent
+│   │   └── tw-subagent.md              # TW 技术写作 Agent
+│   └── skills/                         # 技能定义（执行逻辑封装）
+│       ├── impm-project-update/        # 项目分析与 project.md 管理
+│       │   ├── SKILL.md
+│       │   └── PROJECT-TEMPLATE.MD
+│       ├── impm-req-create/            # 需求文档生成
+│       │   └── SKILL.md
+│       ├── impm-prd-create/            # PRD 文档生成
+│       │   └── SKILL.md
+│       ├── impm-architect-update/       # 架构文档生成/更新
+│       │   ├── SKILL.md
+│       │   └── ARCH-TEMPLATE.MD
+│       ├── impm-sds-create/           # 技术规格说明生成
+│       │   └── SKILL.md
+│       ├── impm-task-create/           # 任务清单生成
+│       │   └── SKILL.md
+│       ├── impm-coding/                # TDD 驱动编码执行
+│       │   └── SKILL.md
+│       └── impm-doc-update/            # 项目文档与注释生成
+│           └── SKILL.md
+├── docs/                               # 项目文档目录
+│   ├── project.md                      # 项目信息文档（自动维护）
+│   ├── architecture.md                 # 架构文档（本文件）
+│   ├── requires/                       # 需求文档
+│   │   └── opencode-impm-requirement-v0.1.0.md
+│   ├── prds/                           # PRD 文档
+│   │   └── opencode-impm-prd-v0.1.0.md
+│   ├── sds/                          # 技术规格说明
+│   └── tasks/                          # 任务清单
+│       ├── opencode-impm-task-v0.1.0.md
+│       └── opencode-impm-task-v0.1.0.json
+├── src/                                # 源代码目录
+│   ├── index.ts                        # 插件入口（注册命令和工具）
+│   ├── tools/                          # 工具函数实现（每个文件注册一个 OpenCode Tool）
+│   │   ├── doc-reader.ts               # 文档读取工具
+│   │   ├── doc-writer.ts               # 文档写入工具
+│   │   ├── doc-version.ts              # 版本号管理工具
+│   │   ├── task-manager.ts             # 任务状态管理工具
+│   │   ├── project-analyzer.ts         # 项目结构分析工具
+│   │   ├── git-helper.ts               # Git 操作工具
+│   │   └── context-builder.ts          # 上下文构建工具
+│   └── utils/                          # 通用工具函数
+│       ├── paths.ts                    # 路径常量和工具函数
+│       ├── git.ts                      # Git 操作函数集
+│       └── version.ts                  # 版本号工具函数集
+├── __tests__/                          # 单元测试目录（与 src 结构对应）
+│   ├── tools/
+│   │   ├── doc-reader.test.ts
+│   │   ├── doc-writer.test.ts
+│   │   ├── doc-version.test.ts
+│   │   ├── task-manager.test.ts
+│   │   ├── project-analyzer.test.ts
+│   │   ├── git-helper.test.ts
+│   │   └── context-builder.test.ts
+│   └── utils/
+│       ├── paths.test.ts
+│       ├── git.test.ts
+│       └── version.test.ts
+├── package.json                        # 项目配置与依赖声明
+├── tsconfig.json                       # TypeScript 编译配置
+├── opencode.json                       # OpenCode 插件配置
+└── README.md                           # 项目自述（TW Subagent 生成）
 ```
 
 ---
 
-## Subagent 协作模式
+## 9. 架构质量属性
 
-### 编排模式：顺序管道 + 单步并行
-
-```
-PM Agent (主控)
-  │
-  ├─→ SA ──→ project.md                          [顺序]
-  ├─→ BA ──→ requirement.md ──→ prd.md           [顺序]
-  ├─→ SA ──→ ARCHITECTURE.md                     [顺序]
-  ├─→ TL ──→ spec.md ──→ tasks (.md+.json)       [顺序]
-  │
-  │  [循环: 按依赖排序后的任务列表]
-  ├─→ CS + WS ──→ 上下文材料                      [并行]
-  │     │
-  │     ├─→ TE ──→ 测试代码                      [顺序]
-  │     ├─→ FE/BE/DE ──→ 实现代码                [顺序]
-  │     ├─→ TE ──→ 验证测试                       [顺序]
-  │     │    └─→ 不通过 → 返回重新编码             [循环]
-  │     └─→ TW ──→ 代码注释                      [顺序]
-  │
-  └─→ TW ──→ README + 部署文档                    [顺序]
-  └─→ Git ──→ 合并分支                           [最终]
-```
-
-### Subagent 角色职责一览
-
-| 角色 | 职责 | 调用时机 |
-|:----:|------|---------|
-| **PM** | 主编排器，调度所有subagent，管理Git/版本/任务状态 | 全程 |
-| **SA** | 初始化项目信息（project.md），设计架构（ARCHITECTURE.md） | 第1步、第4步 |
-| **BA** | 编写需求文档和PRD文档，与用户交互澄清需求 | 第2步、第3步 |
-| **TL** | 编写技术规格说明和任务清单，审核代码质量 | 第5步、第6步 |
-| **TE** | 编写测试用例和测试代码，验证实现是否正确 | 第7步 |
-| **FE** | 前端任务编码实现 | 第7步（任务类型=frontend） |
-| **BE** | 后端任务编码实现 | 第7步（任务类型=backend） |
-| **DE** | 通用任务编码实现 | 第7步（任务类型=common） |
-| **CS** | 搜索本地代码库，提供参考实现 | 第7步 |
-| **WS** | 搜索三方包和中间件的官方文档 | 第7步 |
-| **TW** | 添加代码注释，生成项目文档 | 第7步（注释）、第8步（文档） |
-| **DBA** | 数据库相关设计与操作 | 按需调用 |
+| 质量属性 | 实现策略 | 验证方式 |
+| -------- | ----------------- | ----------- |
+| **可维护性** | 模块化分层架构，每个工具函数独立文件，职责单一 | 代码审查 + 圈复杂度检查 |
+| **可测试性** | 纯函数优先设计，工具函数不依赖全局状态，输入输出明确 | 单元测试覆盖率 ≥ 90% |
+| **可扩展性** | 工具函数注册制，新增工具只需新建文件并注册；Subagent 通过技能定义扩展 | 新增一个工具的成本评估 |
+| **可靠性** | 统一错误处理返回消息而非抛异常；doc-writer 原子写入；WS 网络超时控制 | 异常场景测试 + 错误注入测试 |
+| **可移植性** | 仅依赖 Node.js 内置模块；不依赖操作系统特性；文件路径使用 path 模块处理 | 跨 Windows/macOS/Linux 运行测试 |
+| **性能** | 同步文件 I/O（无异步调度开销）；上下文构建按需提取不做全量加载 | 基准测试 + 压力测试 |
+| **安全性** | project-analyzer 排除敏感文件；不存储 Git 凭证；WS 不发送项目代码 | 安全扫描 + 代码审计 |
 
 ---
 
-## 版本号管理规范
+## 10. 附录
 
-### 版本号策略
-- 格式：语义化版本号 `主版本.次版本.修订号`（如 `v1.2.3`）
-- 主版本号：架构/API重大变更时升级
-- 次版本号：新增功能时升级
-- 修订号：Bug修复或微小变更时自动递增
-- 首次无指定版本号：默认 `v0.0.1`
-- 后续递增：读取 `docs/requires/` 下最新版本号的修订号 +1
+### A. 接口规范模板
 
-### 版本号统一
-- 同一轮 `/impm` 流程中所有文档共享同一版本号
-- 版本号存储在文档文件名和文档头部
-- 版本号管理统一通过 `impm_doc_version` 工具
+```typescript
+// 工具函数统一注册模式
+interface ToolRegistration {
+  name: string;
+  description: string;
+  parameters: {
+    type: 'object';
+    properties: Record<string, {
+      type: 'string' | 'number' | 'boolean' | 'object';
+      description: string;
+    }>;
+    required: string[];
+  };
+}
 
----
+// 工具执行函数统一签名
+type ToolExecuteFunction<TArgs, TResult> = (args: TArgs) => TResult;
 
-## 部署架构
-
-### 插件部署方式
-1. **npm 包模式**（推荐）
-   - 在 `.opencode.json` 中配置 `"plugins": ["opencode-impm"]`
-   - 自动安装 assets 到 `.opencode/` 目录
-
-2. **本地开发模式**
-   - 运行 `scripts/install.ps1`（Windows）或 `scripts/install.mjs`
-   - 手动复制 `assets/` 到 `.opencode/` 目录
-
-### 运行环境
-```
-┌─────────────────────────────────────┐
-│          OpenCode 平台               │
-│  ┌───────────────────────────────┐  │
-│  │   opencode-impm (插件进程)     │  │
-│  │   ┌─────────┐                 │  │
-│  │   │Agent/   │  Skills + Tools │  │
-│  │   │SubAgent ├──→ 7 Tools     │  │
-│  │   │ 系统    │  + 8 Skills    │  │
-│  │   └─────────┘                 │  │
-│  └───────────────────────────────┘  │
-│  ┌───────────────────────────────┐  │
-│  │        用户项目目录            │  │
-│  │  (project.md / docs/ / src/)  │  │
-│  └───────────────────────────────┘  │
-│  ┌───────────────────────────────┐  │
-│  │      Git 仓库 / GitHub        │  │
-│  └───────────────────────────────┘  │
-└─────────────────────────────────────┘
+// 插件入口函数统一签名
+type PluginFunction = (context: OpenCodeContext) => {
+  commands?: CommandRegistration[];
+  tools?: ToolRegistration[];
+};
 ```
 
-### 关键依赖
-- **运行时：** Node.js >= 18.0.0
-- **平台：** OpenCode（提供 Agent/Skill 运行时）
-- **版本控制：** Git（本地仓库）
-- **可选：** MCP 网络搜索工具（用于 WS subagent 查询三方文档）
+### B. 文档命名规范
 
----
+| 文档类型 | 目录 | 文件名格式 | 示例 |
+| ----- | ---- | -------- | ------ |
+| 需求文档 | docs/requires/ | `{projectName}-requirement-v{version}.md` | `opencode-impm-requirement-v0.1.0.md` |
+| PRD 文档 | docs/prds/ | `{projectName}-prd-v{version}.md` | `opencode-impm-prd-v0.1.0.md` |
+| 架构文档 | docs/ | `architecture.md` | `architecture.md` |
+| 技术规格 | docs/sds/ | \`{projectName}-sds-v{version}.md\` | \`opencode-impm-sds-v0.1.0.md\` |
+| 任务清单 | docs/tasks/ | `{projectName}-task-v{version}.md` / `.json` | `opencode-impm-task-v0.1.0.json` |
+| 项目信息 | docs/ | `project.md` | `project.md` |
 
-## 可扩展性设计
+### C. 版本号规则
 
-### Subagent 扩展
-- 新增 subagent 只需在 `assets/agents/` 下添加配置文件
-- 配置文件中定义触发词、角色描述和可用工具列表
-- 无需修改核心编排代码
+格式： `v{主版本}.{次版本}.{修订号}`
 
-### Skill 扩展
-- 在 `assets/skills/` 下创建新技能目录
-- 技能定义文件中声明输入输出规范和执行步骤
-- 在 PM Agent 编排逻辑中注册新的技能步骤
+递增规则：
+- **主版本**：架构有重大变更，不兼容旧版本时
+- **次版本**：新增功能或用户故事时
+- **修订号**：Bug 修复、文档微调、小改进时
 
-### Tool 扩展
-- 在 `src/tools/` 下实现新工具（遵循工具定义接口规范）
-- 在 `src/index.ts` 中注册到 `tool` 对象
-- 工具自动对所有 Agent 和 Subagent 可见
+### D. 参考文档
 
----
-
-## 非功能架构决策
-
-| 质量属性 | 架构策略 |
-|---------|---------|
-| **可维护性** | 分层架构、关注点分离、统一编码规范 |
-| **可测试性** | TDD流程保证每个工具函数都有测试覆盖 |
-| **可靠性** | 任务状态JSON持久化、Git分支隔离、版本号一致性校验 |
-| **性能** | 上下文隔离避免大上下文、工具异步执行 |
-| **安全性** | 仅操作项目目录内文件、只读网络查询 |
-| **可用性** | 简体中文交互、进度反馈、错误提示清晰 |
-
----
-
-## 设计模式总结
-
-| 模式 | 应用场景 | 实现方式 |
-|------|---------|---------|
-| **微内核架构** | 整体系统组织 | PM Agent 作为内核编排，Skills/Subagent 作为插件扩展 |
-| **管道-过滤器** | 全流程数据流 | 每个技能是一个过滤器，文档是管道中的数据结构 |
-| **策略模式** | 任务执行（FE/BE/DE） | 根据任务类型选择不同编码 subagent |
-| **模板方法** | 技能执行流程 | 每个技能有固定的输入→执行→输出模板 |
-| **外观模式** | 7个工具 | 封装底层复杂性，对外提供简洁统一接口 |
-| **单例模式** | Git/路径/版本工具 | 无状态工具函数，全局复用 |
+- [OpenCode IMPM PRD v0.1.0](docs/prds/opencode-impm-prd-v0.1.0.md)
+- [OpenCode IMPM Project 信息](docs/project.md)
+- [OpenCode 插件开发文档](https://docs.opencode.ai)（网络查询）

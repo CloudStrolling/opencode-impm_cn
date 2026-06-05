@@ -27,14 +27,14 @@ permission:
 
 - 使用impm_context_builder获取精简的任务上下文
 - 使用impm_doc_reader读取必要的文档
-- 严格按照spec和任务描述实现
+- 严格按照sds和任务描述实现
 - 代码风格遵循project.md中的Coding Conventions
 - 每个函数添加简体中文注释
 - 实现完成后确保测试通过
 
 ## 编码流程
 
-1. 读取任务上下文（PRD片段、架构片段、spec、编码规范）
+1. 读取任务上下文（PRD片段、架构片段、sds、编码规范）
 2. 确认测试用例已由TE编写
 3. 实现代码使测试通过
 4. 如测试失败，分析原因并修复

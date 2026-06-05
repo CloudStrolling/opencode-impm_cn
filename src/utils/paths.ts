@@ -10,11 +10,14 @@ import { join } from "node:path";
 /** impm标准目录名称映射 */
 export const DOC_DIRS = {
     docs: "docs",
-    specs: "docs/specs",
+    sds: "docs/sds",
     requires: "docs/requires",
     tasks: "docs/tasks",
     prds: "docs/prds",
 } as const;
+
+/** 技能模板目录路径（相对于项目根目录） */
+export const TEMPLATES_DIR = ".opencode/skills";
 
 /**
  * 文档类型到目录路径的映射
@@ -23,7 +26,7 @@ export const DOC_DIRS = {
 export const DOC_TYPE_DIR: Record<string, string> = {
     requirement: DOC_DIRS.requires, // 需求文档 → docs/requires/
     prd: DOC_DIRS.prds, // PRD文档 → docs/prds/
-    spec: DOC_DIRS.specs, // 技术规格 → docs/specs/
+    sds: DOC_DIRS.sds, // 技术规格 → docs/sds/
     task: DOC_DIRS.tasks, // 任务清单 → docs/tasks/
     architect: DOC_DIRS.docs, // 架构文档 → docs/architecture.md
     project: DOC_DIRS.docs, // 项目信息 → docs/project.md
@@ -33,7 +36,7 @@ export const DOC_TYPE_DIR: Record<string, string> = {
 export const DOC_TYPE_PREFIX: Record<string, string> = {
     requirement: "requirement",
     prd: "prd",
-    spec: "spec",
+    sds: "sds",
     task: "task",
     architect: "architecture",
     project: "project",
@@ -43,7 +46,7 @@ export const DOC_TYPE_PREFIX: Record<string, string> = {
 export const DOC_TYPE_EXT: Record<string, string> = {
     requirement: ".md",
     prd: ".md",
-    spec: ".md",
+    sds: ".md",
     task: ".md",
     architect: ".md",
     project: ".md",
@@ -57,7 +60,7 @@ export const DOC_TYPE_EXT: Record<string, string> = {
  * - 版本化文档：{项目名称}-{文档类型}-v{版本号}.md
  *
  * @param projectName 项目名称（如 opencode-impm）
- * @param docType 文档类型（requirement/prd/spec/task）
+ * @param docType 文档类型（requirement/prd/sds/task）
  * @param version 版本号（如 0.1.0）
  * @returns 标准化的文件名（不含目录路径）
  */

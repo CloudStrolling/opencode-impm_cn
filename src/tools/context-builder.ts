@@ -29,7 +29,7 @@ interface ContextBuilderArgs {
 
 export const contextBuilderDefinition = {
     description:
-        "为编码subagent构建精简上下文：根据任务ID收集相关PRD、架构、spec片段",
+        "为编码subagent构建精简上下文：根据任务ID收集相关PRD、架构、sds片段",
     args: {
         projectRoot: {
             type: "string" as const,
@@ -71,7 +71,7 @@ export async function contextBuilderExecute(
     }
 
     // 2. 读取project.md
-    const projectMdPath = join(projectRoot, "project.md");
+    const projectMdPath = join(projectRoot, "docs", "project.md");
     if (existsSync(projectMdPath)) {
         const content = readFileSync(projectMdPath, "utf-8");
         // 提取Coding Conventions部分
@@ -103,11 +103,11 @@ export async function contextBuilderExecute(
         }
     }
 
-    // 5. 读取spec
-    const specDir = join(projectRoot, DOC_TYPE_DIR.spec);
-    const specContent = findAndReadDoc(specDir, projectName, "spec", version);
-    if (specContent) {
-        sections.push(`# 技术规格\n${specContent}`);
+    // 5. 读取sds
+    const sdsDir = join(projectRoot, DOC_TYPE_DIR.sds);
+    const sdsContent = findAndReadDoc(sdsDir, projectName, "sds", version);
+    if (sdsContent) {
+        sections.push(`# 技术规格\n${sdsContent}`);
     }
 
     return sections.join("\n\n---\n\n");
@@ -214,8 +214,8 @@ function findAndReadDoc(
             ? "requirement"
             : docType === "prd"
               ? "prd"
-              : docType === "spec"
-                ? "spec"
+              : docType === "sds"
+                ? "sds"
                 : docType === "task"
                   ? "task"
                   : null;
