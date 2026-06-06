@@ -1,3 +1,8 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 description: 查询网络资料 - 搜索与当前任务相关的第三方包和文档
 agent: pm

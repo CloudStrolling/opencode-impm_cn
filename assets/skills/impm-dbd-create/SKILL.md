@@ -1,3 +1,8 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 name: impm-dbd-create
 description: 创建dbd - 生成数据库设计文档

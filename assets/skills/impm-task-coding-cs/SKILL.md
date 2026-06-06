@@ -1,3 +1,8 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 name: impm-task-coding-cs
 description: 执行编码2 - 查询现有代码

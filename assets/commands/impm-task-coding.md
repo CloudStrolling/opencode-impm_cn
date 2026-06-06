@@ -1,3 +1,8 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 description: 执行编码 - 针对单个task实行TDD驱动的多agent协作编码
 agent: pm

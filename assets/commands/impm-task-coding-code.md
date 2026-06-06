@@ -1,3 +1,8 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 description: 任务程序编写 - 根据task上下文和参考文件完成编码
 agent: pm

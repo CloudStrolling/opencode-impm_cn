@@ -1,3 +1,8 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 description: impm软件工程全流程开发 - AI项目经理全流程工程式开发，从需求到上线
 agent: pm

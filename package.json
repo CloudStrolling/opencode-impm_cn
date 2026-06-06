@@ -21,8 +21,8 @@
     "ai",
     "tdd"
   ],
-  "author": "",
-  "license": "MIT",
+  "author": "jenemy8023 <jenemy8023@163.com>",
+  "license": "Apache-2.0",
   "dependencies": {
     "zod": "^3.23.0",
     "yaml": "^2.6.0"

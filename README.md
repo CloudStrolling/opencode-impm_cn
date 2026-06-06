@@ -3,7 +3,7 @@
 > 基于 OpenCode 平台的 AI 项目经理插件，实现从需求到上线的全流程自动化工程开发。
 
 [![npm version](https://img.shields.io/npm/v/opencode-impm)](https://www.npmjs.com/package/opencode-impm)
-[![License](https://img.shields.io/npm/l/opencode-impm)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](package.json)
 
 ---
@@ -178,4 +178,18 @@ opencode-impm/
 
 ## 许可证
 
-MIT
+Apache 2.0
+
+Copyright 2026 jenemy8023 &lt;jenemy8023@163.com&gt;
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

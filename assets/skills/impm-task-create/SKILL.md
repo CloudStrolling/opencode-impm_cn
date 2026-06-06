@@ -1,7 +1,11 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 name: impm-task-create
 description: 创建任务清单 - 根据PRD和架构文档生成任务.md和任务.json
-license: MIT
 ---
 
 # impm-task-create 技能

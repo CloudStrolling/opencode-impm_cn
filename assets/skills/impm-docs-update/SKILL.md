@@ -1,7 +1,11 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 name: impm-docs-update
 description: 更新项目文档 - 生成README、部署文档等项目相关文档
-license: MIT
 ---
 
 # impm-docs-update 技能

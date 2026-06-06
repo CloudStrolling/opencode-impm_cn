@@ -1,7 +1,11 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 name: impm-task-coding
 description: 执行编码 - 针对task实行TDD驱动的多agent协作编码
-license: MIT
 ---
 
 # impm-task-coding 技能

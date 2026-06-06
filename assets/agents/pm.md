@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
 
 ---
 description: Project Manager - 编排impm软件工程全流程，调度其他Agent完成开发任务

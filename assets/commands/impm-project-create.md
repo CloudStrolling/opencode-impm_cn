@@ -1,3 +1,8 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 description: 创建或更新project.md - 分析项目结构，生成项目信息、编码规范和文件地图
 agent: pm
