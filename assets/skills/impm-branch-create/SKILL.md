@@ -5,7 +5,7 @@ Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
 
 ---
 name: impm-branch-create
-description: 创建新的git分支，作为本次项目的基础分支。
+description: 创建新的git分支 - 基于版本信息创建项目分支并提交前序文档
 ---
 
 # impm-branch-create 技能
@@ -32,8 +32,8 @@ impm-branch-create
 3. 以项目名称加版本号为分支名称，创建新的分支并切换到新的分支。
 
 ### 3. 提交前序文档
-1、将前序生成的需求文档加入新的分支的git。
-2、如果当前分支的git中没有project.md，则将project.md加入当前分支。
+1. 将前序生成的需求文档加入新的分支的git。
+2. 如果当前分支的git中没有project.md，则将project.md加入当前分支。
 
 ### 4. 返回PM
 

@@ -39,9 +39,9 @@ impm-req-create
 ```markdown
 # 需求文档
 
-**项目名称：** {项目名称}
-**版本号：** v{x.x.x}
-**日期：** {当前日期}
+**项目名称：** {PROJECT_NAME}
+**版本号：** v{X.Y.Z}
+**日期：** {YYYY-MM-DD}
 
 ## 项目背景
 {背景描述}
@@ -68,7 +68,7 @@ impm-req-create
 
 ### 4. 写入文档
 使用impm_doc_writer将需求文档写入：
-`docs/requires/{项目名称}-requirement-v{x.x.x}.md`
+`docs/requires/{PROJECT_NAME}-requirement-v{X.Y.Z}.md`
 将docs/project.md 的当前进度改为：impm-req
 
 ### 5. 返回文档位置
@@ -77,7 +77,7 @@ impm-req-create
 
 
 ## 交付物
-- docs/requires/{项目名称}-requirement-v{x.x.x}.md
+- docs/requires/{PROJECT_NAME}-requirement-v{X.Y.Z}.md
 
 ## 注意事项
 - 版本号确定后，后续所有文档和程序版本都使用此版本号

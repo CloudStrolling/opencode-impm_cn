@@ -28,7 +28,7 @@ impm-task-coding-context
 2. 根据版本号定位task文件，根据任务编号在task文件中找到相应的任务内容。
 3. 根据任务内容中关联的userstory找到对应的prd的userstory内容。
 4. 然后从architecture.md、project.md和当前版本中sds中分析查询与上述任务相关的部分。
-5. 将task的任务内容和userstory的内容。以及architecture.md、project.md和当前版本中sds中相关的部分全部合并到一起。
+5. 将task的任务内容和userstory的内容，以及architecture.md、project.md和当前版本中sds中相关的部分全部合并到一起。
 6. 将合并后的内容放入：docs/tasks/task_{v.x.y.z}/TASK-{001}/context.md。大括号中的内容分别是版本号和任务编号。
 7. 将task（包含json和md）的状态改为：context_finish
 8. 返回PM

@@ -3,7 +3,7 @@
 **项目中文名称：** {PROJECT_NAME_CN}
 **项目名称：** {PROJECT_NAME}
 **版本号：** v{X.Y.Z}
-**日期：** YYYY-MM-DD
+**日期：** {YYYY-MM-DD}
 
 ---
 

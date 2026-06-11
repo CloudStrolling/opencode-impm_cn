@@ -4,14 +4,14 @@ Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
 -->
 
 ---
-name: impm-task-coding-dba
+name: impm-task-coding-dbd
 description: 执行编码4 - 数据库设计
 ---
 
-# impm-task-coding-dba 技能
+# impm-task-coding-dbd 技能
 
 ## 触发词
-impm-task-coding-dba
+impm-task-coding-dbd
 
 ## 何时使用
 - 针对一个任务进行具体编码的第四步：数据库设计

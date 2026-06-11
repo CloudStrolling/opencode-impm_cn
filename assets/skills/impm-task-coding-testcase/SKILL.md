@@ -24,9 +24,9 @@ impm-task-coding-testcase
 - docs/tasks/task_{v.x.y.z}/TASK-{001}/ws.md
 - docs/tasks/task_{v.x.y.z}/TASK-{001}/dbd.md
   大括号中的内容分别是版本号和任务编号。
-2. 参考技能同目录下的模版文件TESTCASE-TEMPLATE.MD作为文档模版。
-3. 根据上述文件内容，特别context.md的测试验收标准部分的内容，生成单元测试用例文档。文档内容写入docs/tasks/task_{v.x.y.z}/TASK-{001}/testcase.md
-4. 生成测试用例时，需要特别关注异常和边缘数值的用例，保证用例全面，测试覆盖率高。
-5. 测试自动化测试脚本、测试过程、测试结论这三段暂时不用编写。
-6. 将task（包含json和md）的状态改为：testcase_finish
-7. 结束subagent，返回PM。
+3. 参考技能同目录下的模板文件TESTCASE-TEMPLATE.MD作为文档模板。
+4. 根据上述文件内容，特别context.md的测试验收标准部分的内容，生成单元测试用例文档。文档内容写入docs/tasks/task_{v.x.y.z}/TASK-{001}/testcase.md
+5. 生成测试用例时，需要特别关注异常和边缘数值的用例，保证用例全面，测试覆盖率高。
+6. 测试自动化测试脚本、测试过程、测试结论这三段暂时不用编写。
+7. 将task（包含json和md）的状态改为：testcase_finish
+8. 结束subagent，返回PM。

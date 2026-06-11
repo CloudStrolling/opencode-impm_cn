@@ -66,7 +66,7 @@ impm-project-create
 - 每个文件中的函数/类列表
 - 每个函数/类的一句话描述
 
-### 6. 写入project.md
+### 7. 写入project.md
 使用impm_doc_writer将内容写入docs/project.md。
 如有需要，可以通过搜索本地代码（用CS subagent）和网上查询（用WS subagent）收集相关信息，完善文档。
 

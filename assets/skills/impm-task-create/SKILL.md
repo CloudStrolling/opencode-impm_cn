@@ -30,21 +30,21 @@ impm-task-create
 根据文档生成两个文件：.md和.json
 
 #### 生成task的md
-读取同目录下的 `TASK-TEMPLATE.MD` 文件作为任务文档生成模版：
-根据需求文档、project.md 和 PRD-TEMPLATE.MD 模版，生成格式完整的PRD文档：
-- 模版中的 `{PROJECT_NAME_CN}`、`{PROJECT_NAME}`、`{X.Y.Z}` 等占位符替换为实际值
-- 模版中的占位描述（如 `{描述项目要解决的核心问题...}`）替换为实际内容
+读取同目录下的 `TASK-TEMPLATE.MD` 文件作为任务文档生成模板：
+根据PRD、SDS、架构文档和project.md，生成格式完整的任务清单文档：
+- 模板中的 `{PROJECT_NAME_CN}`、`{PROJECT_NAME}`、`{X.Y.Z}` 等占位符替换为实际值
+- 模板中的占位描述（如 `{描述项目要解决的核心问题...}`）替换为实际内容
 - TASK-{NNN} 编号从 001 开始递增
-- 如果模版中部分内容不使用当前项目，可以TASK中去除这些文档部件。
-- 上下文读取是指：上下文读取的方式，从prd，sds中读取哪些段落。
+- 如果模板中部分内容不使用当前项目，可以在TASK中去除这些文档部件。
+- 上下文读取：指定contextObtain字段的值，描述从PRD、SDS中需要读取哪些段落作为任务上下文。
 
 #### .json文件格式
 ```json
 {
-  "projectName": "{项目名称}",
-  "version": "{版本号}",
-  "prd": "docs/prds/{项目名称}-prd-v{X.Y.Z}.md",
-  "sds": "docs/sds/{项目名称}-sds-v{X.Y.Z}.md",
+  "projectName": "{PROJECT_NAME}",
+  "version": "{X.Y.Z}",
+  "prd": "docs/prds/{PROJECT_NAME}-prd-v{X.Y.Z}.md",
+  "sds": "docs/sds/{PROJECT_NAME}-sds-v{X.Y.Z}.md",
   "architecture": "docs/architecture.md",
   "project": "docs/project.md",
   "tasks": [
@@ -56,11 +56,11 @@ impm-task-create
       "userStoryIds": {["US-001",...]},
       "upstreamTaskIds": {[]},
       "downstreamTaskIds": {["TASK-002"]},
-      "priority": "P0` | P1 | P2",
+      "priority": "P0 | P1 | P2",
       "status": "pending",
       "testMethod": "{测试方法}",
       "acceptanceCriteria": "{验收标准}",
-      "contextObtain":"{上下文读取}"
+      "contextObtain": "{上下文读取}"
     }
   ]
 }
@@ -87,8 +87,8 @@ impm-task-create
 返回两个文件的路径给PM agent。
 
 ## 交付物
-- docs/tasks/{项目名称}-task-v{x.x.x}.md
-- docs/tasks/{项目名称}-task-v{x.x.x}.json
+- docs/tasks/{PROJECT_NAME}-task-v{X.Y.Z}.md
+- docs/tasks/{PROJECT_NAME}-task-v{X.Y.Z}.json
 
 ## 注意事项
 - 任务粒度要细，避免单个任务过大

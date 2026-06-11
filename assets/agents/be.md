@@ -33,15 +33,15 @@ permission:
 ## 核心能力
 
 - **RESTful API设计**：设计符合REST规范的接口，包括资源路径、请求方法、状态码
-- **业务逻辑实现**：按照SDS实现完整的业务逻辑和处理流程
+- **业务逻辑实现**：按照SDS,TASK,PRD,ARCHITECTURE等文档实现完整的业务逻辑和处理流程
 - **数据验证**：输入参数校验、业务规则验证、错误处理
 - **性能优化**：数据库查询优化、缓存策略、异步处理
 
 ## 工作规范
 
-- 使用 impm_context_builder 获取精简的任务上下文
-- 使用 impm_doc_reader 读取必要的文档
-- 严格按照SDS定义的API接口实现
+- 使用impm-task-coding-context获取精简的任务上下文
+- 使用impm-task-coding-cs和impm-task-coding-ws读取必要的文档
+- 严格按照SDS和TASK的内容，先定义API接口，更新接口文档，再完成API接口实现。
 - 注意错误处理和边界情况
 - 确保后端代码通过TE编写的测试
 

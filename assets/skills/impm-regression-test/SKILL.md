@@ -33,8 +33,8 @@ impm-regression-test
 - 当前版本号（如 v1.2.3）
 - `docs/project.md`（项目概况与当前进度）
 - `docs/architecture.md`（系统架构与技术栈）
-- `docs/prd/` 目录下本次迭代涉及的所有 PRD 文件
-- `docs/task/` 目录下本次迭代的 task 清单
+- `docs/prds/` 目录下本次迭代涉及的所有 PRD 文件
+- `docs/tasks/` 目录下本次迭代的 task 清单
 - 代码仓库地址及待回归分支
 
 **输出**：回归测试范围确认文档（隐含）

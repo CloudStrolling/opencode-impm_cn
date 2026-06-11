@@ -5,7 +5,7 @@ Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
 
 ---
 name: impm-branch-commit
-description: 创建新的git分支，作为本次项目的基础分支。
+description: 提交代码并合并分支 - 将当前分支代码提交并合并到主分支
 ---
 
 # impm-branch-commit 技能
@@ -14,11 +14,11 @@ description: 创建新的git分支，作为本次项目的基础分支。
 impm-branch-commit
 
 ## 何时使用
-- 项目完成后额最后一步
+- 编码和文档更新全部完成后的最后一步
 
 ## 执行步骤
 1. PM启用VCA subagent来执行代码提交任务。
-2. vca需要分析所有未提交的文件，哪些是需要加入git中的，哪些是需要排除的。
+2. VCA需要分析所有未提交的文件，哪些是需要加入git中的，哪些是需要排除的。
 3. 将排除的列入排除清单。
 4. 将剩余文件提交。
 5. 将当前分支合并到主分支。

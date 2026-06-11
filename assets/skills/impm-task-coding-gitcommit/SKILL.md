@@ -21,6 +21,7 @@ impm-task-coding-gitcommit
 PM启用VCA subagent来执行代码提交任务。
 vca需要分析所有未提交的文件，哪些是需要加入git中的，哪些是需要排除的。
 将排除的列入排除清单。
-将剩余文件提交。  
+将剩余文件提交。
+使用impm_task_manager将task（包含json和md）的状态改为：commit_finish  
 
 

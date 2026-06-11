@@ -23,21 +23,9 @@ impm-task-coding
 - 当前任务编号
 - 如果必要输入不满足，需要直接询问用户
 
-## 执行步骤
-  1. 启动TL，使用技能：impm-task-coding-context，收集需求相关的上下文。
-  2. 启动CS，使用技能：impm-task-coding-cs，收集与当前任务关联的现有代码和文档的情况。
-  3. 启动WS，使用技能：impm-task-coding-ws，收集与当前任务关联的网络资料和文档。
-  4. 启动DBA，使用技能：impm-task-coding-dbd，编写数据库设计文档和数据库脚本。
-  5. 启动TE，使用技能：impm-task-coding-testcase，编写测试用例文档。
-  6. 根据任务类型启动FE/BE/DE，使用技能：impm-task-coding-code，对当前任务完成编码。
-  7. 启动TE，使用技能：impm-task-coding-test，编写测试脚本并执行测试。
-  8. 如测试失败，带着报错信息回退到步骤6重新尝试编码。
-  9. 启动TL，使用技能：impm-task-coding-review，审核代码质量。
-  10. 启动TW，使用技能：impm-task-coding-comment，给代码增加注释。
-  11. 启动SA，使用技能：impm-task-coding-projectmap，更新 project.md 项目地图。
-  12. 启动VCA，使用技能：impm-task-coding-gitcommit，提交代码。
+## 执行流程
 
-### 阶段1: 信息收集
+### 阶段1：信息收集
 
 #### 启动TL subagent（技术负责人）
 1. 使用技能：impm-task-coding-context
@@ -56,7 +44,7 @@ impm-task-coding
 3. 在线搜索对应的官方文档中需要使用到的部分
 4. 收集与当前任务关联的网络资料和文档
 
-### 阶段2: 数据库设计
+### 阶段2：数据库设计
 
 #### 启动DBA subagent（数据库管理员）
 1. 使用技能：impm-task-coding-dbd
@@ -64,17 +52,16 @@ impm-task-coding
 3. 编写数据库设计文档和数据库脚本
 4. 如有数据库变更，执行数据库脚本
 
-### 阶段3: 测试驱动开发（TDD第一阶段）
+### 阶段3：测试驱动开发（TDD第一阶段）
 
 #### 启动TE subagent（测试工程师）
 1. 使用技能：impm-task-coding-testcase
 2. 将PRD和task信息内容，CS、WS、DBA获取的内容作为上下文
 3. 编写测试用例、测试代码和预期结果
 4. 测试代码应在此阶段无法通过（功能代码尚未实现）
-5. 测试用例文档放在docs/tests/{项目名称}-test-v{x.y.z}.md
-6. 如果文件已存在，将本次测试用例加在用例文档后面
+5. 测试用例文档按照技能 impm-task-coding-testcase 的规范写入对应路径
 
-### 阶段4: 编码实现
+### 阶段4：编码实现
 
 #### 根据任务类型选择编码agent
 - 前端任务 → 启动FE subagent，使用技能：impm-task-coding-code
@@ -83,9 +70,11 @@ impm-task-coding
 
 1. 将对应的PRD和task信息，CS、WS、DBA获取的内容作为上下文传入编码agent
 2. 编码agent同时读取architecture.md、project.md和sds
-3. 编码agent根据获取的上述信息，完成编码
+3. 前端任务还需要读取interface.md的接口信息。
+4. 编码agent根据获取的上述信息，完成编码
+5. 【后端任务】编码agent中的 impm-task-coding-code 技能会在编码前先设计接口文档（interface.md），编码后再进行接口实现
 
-### 阶段5: 测试验证（TDD第二阶段）
+### 阶段5：测试验证（TDD第二阶段）
 
 #### 启动TE subagent（测试工程师）
 1. 使用技能：impm-task-coding-test
@@ -97,7 +86,7 @@ impm-task-coding
    - 再次测试，直到通过
    - 如果连续5次不通过，放弃，中止任务并报错
 
-### 阶段6: 代码审核
+### 阶段6：代码审核
 
 #### 启动TL subagent（技术负责人）
 1. 使用技能：impm-task-coding-review
@@ -105,7 +94,16 @@ impm-task-coding
 3. 审核代码的主要内容是否合适
 4. 注释语种使用简体中文
 
-### 阶段7: 代码注释
+### 阶段7：接口文档更新
+
+#### 由PM直接执行（或启动对应subagent）
+1. 仅后端任务需执行本阶段
+2. 使用技能：impm-task-coding-interface
+3. 读取本次任务编写的接口文档：docs/tasks/task_{v.x.y.z}/TASK-{001}/interface.md
+4. 将本次更新的接口合并入全局接口文档：/docs/interface.md（如文件不存在则创建）
+5. 确保不删除其他已有模块的接口定义
+
+### 阶段8：代码注释
 
 #### 启动TW subagent（技术文档编写）
 1. 使用技能：impm-task-coding-comment
@@ -113,15 +111,15 @@ impm-task-coding
 3. 为代码添加详细的注释
 4. 注释语种使用简体中文
 
-### 阶段8: 更新项目地图
+### 阶段9：更新项目地图
 
 #### 启动SA subagent（架构师）
-1. 使用技能：impm-task-coding-projectmap
+1. 使用技能：impm-task-coding-projectmap（注：此技能需先创建该目录及SKILL.md文件后方可使用）
 2. 根据project.md中的本地语言设置
 3. 将本次新增和更新的目录、文件和函数全部写入project.md的项目地图中
 4. 注释语种使用简体中文
 
-### 阶段9: 提交代码
+### 阶段10：提交代码
 
 #### 启动VCA subagent（版本控制管理员）
 1. 使用技能：impm-task-coding-gitcommit
