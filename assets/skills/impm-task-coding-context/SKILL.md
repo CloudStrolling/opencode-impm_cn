@@ -32,3 +32,9 @@ impm-task-coding-context
 6. 将合并后的内容放入：docs/tasks/task_{v.x.y.z}/TASK-{001}/context.md。大括号中的内容分别是版本号和任务编号。
 7. 将task（包含json和md）的状态改为：context_finish
 8. 返回PM
+
+## 完成后提示
+
+执行完毕后，向用户提示以下选项：
+1. **执行下一步** — 按照 `/assets/skills/impm-task-coding/skill.md` 中的阶段顺序，继续执行下一个阶段
+2. **执行后续所有步骤** — 按照 `/assets/skills/impm-task-coding/skill.md` 中的阶段顺序，自动执行从下一个阶段开始的所有剩余阶段

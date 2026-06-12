@@ -42,3 +42,9 @@ impm-task-coding-interface
 ## 注意事项
 - 不要删除 `/docs/interface.md` 中其他已有模块的接口定义
 - 只追加或更新本次任务相关的接口内容
+
+## 完成后提示
+
+执行完毕后，向用户提示以下选项：
+1. **执行下一步** — 按照 `/assets/skills/impm-task-coding/skill.md` 中的阶段顺序，继续执行下一个阶段
+2. **执行后续所有步骤** — 按照 `/assets/skills/impm-task-coding/skill.md` 中的阶段顺序，自动执行从下一个阶段开始的所有剩余阶段

@@ -31,3 +31,9 @@ impm-task-coding-comment
 ### 后续处理
 task状态改为comment-finish  返回PM
 
+## 完成后提示
+
+执行完毕后，向用户提示以下选项：
+1. **执行下一步** — 按照 `/assets/skills/impm-task-coding/skill.md` 中的阶段顺序，继续执行下一个阶段
+2. **执行后续所有步骤** — 按照 `/assets/skills/impm-task-coding/skill.md` 中的阶段顺序，自动执行从下一个阶段开始的所有剩余阶段
+
