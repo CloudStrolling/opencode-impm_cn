@@ -60,6 +60,7 @@ impm-project-create
 - 每个文件的用途描述（从JSDoc或文件头注释提取）
 - 每个文件中的函数/类列表
 - 每个函数/类的一句话描述
+- 如果文件不在git管理范围内，则不加入项目地图。
 
 ### 7. 写入project.md
 使用impm_doc_writer将内容写入docs/project.md。
