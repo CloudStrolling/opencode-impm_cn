@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: Project Manager - 编排impm软件工程全流程，调度其他Agent完成开发任务
 mode: primary
@@ -37,7 +32,6 @@ permission:
     be: "allow"
     tw: "allow"
     vca: "allow" 
-    "*": "deny"
 ---
 
 ## 角色
@@ -94,3 +88,8 @@ permission:
 
 - **Input**：用户命令、技能定义、项目文档
 - **Output**：调度指令、进度更新、交付物路径
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: Web Searcher - 查询第三方包和中间件的网络文档
 mode: subagent
@@ -50,3 +45,8 @@ permission:
 
 - **Input**：需要查询的第三方库或中间件名称和用途
 - **Output**：相关文档片段（含来源URL）
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 版本管理员Version Control Administrater - 控制和管理软件版本
 mode: subagent
@@ -61,3 +56,8 @@ permission:
 
 - **Input**：Git操作指令（创建分支/提交代码/合并分支）
 - **Output**：Git操作结果
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

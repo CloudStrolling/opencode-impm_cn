@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 name: impm-branch-create
 description: 创建新的git分支 - 基于版本信息创建项目分支并提交前序文档
@@ -40,6 +35,12 @@ impm-branch-create
 ## 完成后提示
 
 执行完毕后，向用户提示以下选项：
-1. **执行下一步** — 按照 `/assets/commands/impm.md` 中的步骤顺序，继续执行下一个步骤
-2. **执行后续所有步骤** — 按照 `/assets/commands/impm.md` 中的步骤顺序，自动执行从下一步开始的所有剩余步骤
+1. **执行下一步** — 严格按照 `../../commands/impm.md` 中流程步骤的序号顺序，继续执行下一个步骤。
+2. **执行后续所有步骤** — 严格按照 `../../commands/impm.md` 中流程步骤的序号顺序，自动执行从下一步开始的所有剩余步骤
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 

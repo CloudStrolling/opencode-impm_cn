@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 name: impm-regression-test
 description: 回归测试 - 编码完成后，执行全量回归验证，确保所有修改未引入新的缺陷
@@ -142,7 +137,11 @@ impm-regression-test
 | 失败信息过于简略无法定位 | 必须包含：错误日志、输入数据、预期 vs 实际 |
 
 ## 完成后提示
-
 执行完毕后，向用户提示以下选项：
-1. **执行下一步** — 按照 `/assets/commands/impm.md` 中的步骤顺序，继续执行下一个步骤
-2. **执行后续所有步骤** — 按照 `/assets/commands/impm.md` 中的步骤顺序，自动执行从下一步开始的所有剩余步骤
+1. **执行下一步** — 严格按照 `../../commands/impm.md` 中流程步骤的序号顺序，继续执行下一个步骤。
+2. **执行后续所有步骤** — 严格按照 `../../commands/impm.md` 中流程步骤的序号顺序，自动执行从下一步开始的所有剩余步骤
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

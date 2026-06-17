@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 name: impm-branch-commit
 description: 提交代码并合并分支 - 将当前分支代码提交并合并到主分支
@@ -28,3 +23,7 @@ impm-branch-commit
 
 此步骤是整个 impm 工作流的最后一步，无后续步骤。流程结束。
 
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

@@ -53,7 +53,10 @@ const PLUGIN_ROOT = resolve(__dirname, "..");
 // assets 资源目录
 const ASSETS_DIR = join(PLUGIN_ROOT, "assets");
 
-// 需要复制的目录列表
+// dist 编译目录
+const DIST_DIR = join(PLUGIN_ROOT, "dist");
+
+// 需要复制的目录列表（来自 assets/）
 const ASSET_DIRS = ["commands", "agents", "skills"];
 
 /**
@@ -188,6 +191,24 @@ function main() {
 
         console.log(`复制 ${dir}/ ...`);
         copyDirRecursive(srcDir, destDir);
+    }
+
+    // 安装插件到 .opencode/plugins/opencode-impm/（本地插件方式）
+    const pluginDest = join(opencodeDir, "plugins", "opencode-impm");
+    if (existsSync(DIST_DIR)) {
+        console.log("安装本地插件 opencode-impm ...");
+
+        // 创建插件包目录
+        const pluginDestDir = join(pluginDest, "dist");
+        mkdirSync(pluginDestDir, { recursive: true });
+
+        // 复制 package.json
+        cpSync(join(PLUGIN_ROOT, "package.json"), join(pluginDest, "package.json"));
+
+        // 复制 dist/
+        copyDirRecursive(DIST_DIR, pluginDestDir);
+    } else {
+        console.warn("  跳过：dist 目录不存在", DIST_DIR);
     }
 
     console.log("");

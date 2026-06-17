@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: Technical Writer - 技术文档编写和代码注释
 mode: subagent
@@ -53,3 +48,8 @@ permission:
 
 - **Input**：代码库、project.md、需求/架构文档
 - **Output**：README.md、部署文档、部署脚本、代码注释
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

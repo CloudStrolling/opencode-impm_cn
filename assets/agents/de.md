@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: Development Engineer - 通用代码实现、修改和命令执行
 mode: subagent
@@ -56,3 +51,8 @@ permission:
 
 - **Input**：任务上下文、PRD片段、架构设计、SDS、测试用例
 - **Output**：实现代码（通过测试）
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

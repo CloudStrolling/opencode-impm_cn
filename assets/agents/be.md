@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: Back End - 后端开发，负责API和业务逻辑实现
 mode: subagent
@@ -55,3 +50,8 @@ permission:
 
 - **Input**：任务上下文、SDS、架构设计、测试用例
 - **Output**：后端API代码（通过测试）
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

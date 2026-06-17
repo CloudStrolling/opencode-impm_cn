@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: Front End - UI/UX设计和前端开发
 mode: subagent
@@ -71,3 +66,8 @@ docs/tasks/task_{v.x.y.z}/TASK-{001}/ws.md
 
 - **Input**：任务上下文、PRD、架构设计、测试用例
 - **Output**：前端代码（通过测试）
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

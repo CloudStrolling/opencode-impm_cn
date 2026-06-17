@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: Code Searcher - 本地代码库查询和分析
 mode: subagent
@@ -55,3 +50,8 @@ permission:
 
 - **Input**：搜索任务描述、关键词
 - **Output**：代码片段集合（含文件路径和行号）
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: Test Engineer - 编写测试用例，执行测试验证
 mode: subagent
@@ -55,3 +50,8 @@ permission:
 
 - **Input**：任务上下文、SDS、验收标准
 - **Output**：测试用例文档、测试脚本、测试执行报告
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

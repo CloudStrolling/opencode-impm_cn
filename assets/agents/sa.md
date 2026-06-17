@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: Software Architect - 生成架构文档和搭建项目环境与架构
 mode: subagent
@@ -62,3 +57,8 @@ permission:
 
 - **Input**：PRD、project.md、现有代码库
 - **Output**：project.md、architecture.md
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

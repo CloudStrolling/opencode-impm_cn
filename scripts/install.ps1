@@ -1,4 +1,4 @@
-# Copyright 2026 jenemy8023 <jenemy8023@163.com>
+﻿# Copyright 2026 jenemy8023 <jenemy8023@163.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,7 +40,9 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $PluginRoot = Resolve-Path (Join-Path $ScriptDir "..")
 # assets 资源目录
 $AssetsDir = Join-Path $PluginRoot "assets"
-# 需要复制的目录列表
+# dist 编译目录
+$DistDir = Join-Path $PluginRoot "dist"
+# 需要复制的目录列表（来自 assets/）
 $AssetDirs = @("commands", "agents", "skills")
 
 # 确定目标项目根目录
@@ -119,6 +121,38 @@ foreach ($dir in $AssetDirs) {
             Copy-Item -Path $_.FullName -Destination $destPath -Force
         }
     }
+}
+
+# 安装插件到 .opencode/plugins/opencode-impm/（本地插件方式）
+$PluginDest = Join-Path $OpenCodeDir "plugins/opencode-impm"
+if (Test-Path $DistDir) {
+    Write-Host "安装本地插件 opencode-impm ..."
+
+    # 创建插件包目录
+    $PluginDestDir = Join-Path $PluginDest "dist"
+    New-Item -ItemType Directory -Path $PluginDestDir -Force | Out-Null
+
+    # 复制 package.json
+    Copy-Item -Path (Join-Path $PluginRoot "package.json") -Destination (Join-Path $PluginDest "package.json") -Force
+
+    # 复制 dist/
+    Get-ChildItem -Path $DistDir -Recurse | ForEach-Object {
+        $relativePath = $_.FullName.Substring($DistDir.Length + 1)
+        $destPath = Join-Path $PluginDestDir $relativePath
+        if ($_.PSIsContainer) {
+            if (-not (Test-Path $destPath)) {
+                New-Item -ItemType Directory -Path $destPath -Force | Out-Null
+            }
+        } else {
+            $parentDir = Split-Path -Parent $destPath
+            if (-not (Test-Path $parentDir)) {
+                New-Item -ItemType Directory -Path $parentDir -Force | Out-Null
+            }
+            Copy-Item -Path $_.FullName -Destination $destPath -Force
+        }
+    }
+} else {
+    Write-Host "  跳过：dist 目录不存在 $DistDir" -ForegroundColor Yellow
 }
 
 Write-Host ""

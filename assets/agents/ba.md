@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: Business Analyst - 生成需求分析文档和用户故事
 mode: subagent
@@ -68,3 +63,8 @@ permission:
 
 - **Input**：用户需求描述、已有需求文档模板
 - **Output**：requirement.md、prd.md
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
