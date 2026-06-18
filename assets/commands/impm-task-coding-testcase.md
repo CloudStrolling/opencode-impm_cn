@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 测试用例编写 - 为当前任务编写单元测试用例文档
 agent: pm
@@ -29,3 +24,7 @@ subtask: false
    - 特别关注异常和边缘数值的用例
    - 写入docs/tasks/task_{v}/TASK-{n}/testcase.md
 4. 完成后将task状态改为testcase_finish
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 创建数据库设计文档 - 根据项目需要生成dbd.md
 agent: pm
@@ -29,3 +24,7 @@ subtask: false
    - 生成dbd.md文档
    - 更新project.md进度为impm-dbd
 3. 等待DBA完成后，返回结果摘要
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

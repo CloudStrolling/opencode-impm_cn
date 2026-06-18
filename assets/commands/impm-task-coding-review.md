@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 代码审核 - 对当前任务代码进行质量审查
 agent: pm
@@ -29,3 +24,7 @@ subtask: false
    - 输出审核意见到review.md
 3. 如全部通过，task状态改为review_finish
 4. 如存在问题，返回PM重新修改代码
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

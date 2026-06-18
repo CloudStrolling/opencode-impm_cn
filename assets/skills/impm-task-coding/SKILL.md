@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 name: impm-task-coding
 description: 执行编码 - 针对task实行TDD驱动的多agent协作编码
@@ -82,7 +77,7 @@ impm-task-coding
 3. 如测试通过，进入下一阶段
 4. 如测试失败：
    - 将错误信息加入上下文
-   - 回退到阶段1重新启动信息收集和编码修复代码
+   - 回退到阶段4重新编码
    - 再次测试，直到通过
    - 如果连续5次不通过，放弃，中止任务并报错
 
@@ -96,7 +91,7 @@ impm-task-coding
 
 ### 阶段7：接口文档更新
 
-#### 由PM直接执行（或启动对应subagent）
+#### 启动BE subagent（后端开发）
 1. 仅后端任务需执行本阶段
 2. 使用技能：impm-task-coding-interface
 3. 读取本次任务编写的接口文档：docs/tasks/task_{v.x.y.z}/TASK-{001}/interface.md
@@ -114,7 +109,7 @@ impm-task-coding
 ### 阶段9：更新项目地图
 
 #### 启动SA subagent（架构师）
-1. 使用技能：impm-task-coding-projectmap（注：此技能需先创建该目录及SKILL.md文件后方可使用）
+1. 使用技能：impm-task-coding-projectmap
 2. 根据project.md中的本地语言设置
 3. 将本次新增和更新的目录、文件和函数全部写入project.md的项目地图中
 4. 注释语种使用简体中文
@@ -142,5 +137,10 @@ impm-task-coding
 ## 完成后提示
 
 执行完毕后，向用户提示以下选项：
-1. **执行下一步** — 按照 `/assets/skills/impm-task-coding/skill.md` 中的阶段顺序，继续执行下一个阶段
-2. **执行后续所有步骤** — 按照 `/assets/skills/impm-task-coding/skill.md` 中的阶段顺序，自动执行从下一个阶段开始的所有剩余阶段
+1. **执行下一步** — 退出当前技能，回到impm-coding技能。继续执行下一个task。
+2. **执行后续所有步骤** — 退出当前技能，回到impm-coding技能。继续按顺序逐一执行后续所有task。并执行后续操作。
+
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

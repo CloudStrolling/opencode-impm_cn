@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 更新项目文档 - 生成README、部署文档等项目相关文档
 agent: pm
@@ -28,3 +23,7 @@ subtask: false
    - 生成agent说明文档（如有自定义agent）
    - 生成编译部署文档和脚本
 3. 等待TW完成后，返回结果摘要
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

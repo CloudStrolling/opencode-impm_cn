@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 创建任务清单 - 根据PRD和架构文档生成task.md和task.json
 agent: pm
@@ -28,3 +23,7 @@ subtask: false
    - 拆解为可执行的任务
    - 在docs/tasks/目录下生成task.md和task.json
 4. 等待TL完成后，返回结果摘要和文档路径
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

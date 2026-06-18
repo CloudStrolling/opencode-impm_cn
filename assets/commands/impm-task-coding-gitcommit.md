@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 代码提交Git - 将当前任务代码提交到Git仓库
 agent: pm
@@ -27,3 +22,7 @@ subtask: false
    - 确定哪些需加入Git、哪些需排除
    - 排除应排除的文件
    - 提交剩余文件到Git
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

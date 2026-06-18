@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 提交并合并分支 - 项目完成后整理文件并提交到主分支
 agent: pm
@@ -29,3 +24,7 @@ subtask: false
    - 提交剩余文件
    - 将当前分支合并到主分支
 3. 等待VCA完成后，返回结果摘要
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

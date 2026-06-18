@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 查询现有代码 - 搜索与当前任务相关的现有代码和工具类
 agent: pm
@@ -28,3 +23,7 @@ subtask: false
    - 读取源代码，提取关键代码片段
    - 合并写入docs/tasks/task_{v}/TASK-{n}/cs.md
 3. 完成后将task状态改为cs_finish
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 查询网络资料 - 搜索与当前任务相关的第三方包和文档
 agent: pm
@@ -29,3 +24,7 @@ subtask: false
    - 注意版本兼容性
    - 合并写入docs/tasks/task_{v}/TASK-{n}/ws.md
 3. 完成后将task状态改为ws_finish
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

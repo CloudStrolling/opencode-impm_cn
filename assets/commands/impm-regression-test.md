@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 回归测试 - 编码完成后执行全量回归验证
 agent: pm
@@ -32,3 +27,7 @@ subtask: false
 3. 根据测试结果决定后续流程：
    - 全部通过 → 继续后续流程
    - 存在失败 → 停止流程，指派开发修复后重试
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

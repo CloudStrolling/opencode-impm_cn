@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 创建需求文档 - 根据提示词生成带版本号的需求文档
 agent: pm
@@ -27,3 +22,7 @@ subtask: false
    - 根据用户提示词分析需求
    - 在docs/requires/目录下生成带版本号的需求文档
 4. 等待BA完成后，返回结果摘要和文档路径
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

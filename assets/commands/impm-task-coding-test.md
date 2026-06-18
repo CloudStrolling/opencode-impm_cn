@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 测试代码编写与执行 - 编写测试脚本并执行测试
 agent: pm
@@ -30,3 +25,7 @@ subtask: false
 3. PM判断：
    - 未达失败上限 → 回退到编码步骤重新修复
    - 已达失败上限（默认10次）→ 中止并报错
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

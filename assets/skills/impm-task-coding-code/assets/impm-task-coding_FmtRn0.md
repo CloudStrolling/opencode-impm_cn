@@ -1,3 +1,8 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
+
 ---
 description: 执行编码 - 针对单个task实行TDD驱动的多agent协作编码
 agent: pm
@@ -54,7 +59,3 @@ subtask: false
 - 严格遵守TDD流程：先写测试用例，再写代码
 - 测试失败时不要跳过，必须修复后才能继续
 - 每个阶段使用独立的subagent，保证上下文隔离
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->

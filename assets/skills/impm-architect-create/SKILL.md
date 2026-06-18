@@ -52,9 +52,20 @@ impm-architect-create
 
 ### 6. 写入文档
 使用impm_doc_writer将架构文档写入docs/architecture.md。
+
+### 7. 添加变更记录
+在 docs/architecture.md 末尾追加变更记录：
+- 扫描 `docs/requires/` 目录下的所有文件，对比文件名获取最新版本号（文件名格式如 `v1.0.0.md` 或 `1.0.0.md`，取版本数值最大的）
+- 获取当前日期
+- 在文档末尾添加变更记录表格：
+
+| 变更日期 | 版本号 | 变更说明 |
+|---------|-------|---------|
+| {当前日期} | v{最新版本号} | 架构文档创建/更新 |
+
 然后将docs/project.md 的当前进度改为：impm-architecture
 
-### 7. 返回结果
+### 8. 返回结果
 返回文档路径或"无需更新"给PM agent。
 
 ## 交付物

@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 代码注释 - 为任务修改的代码添加注释
 agent: pm
@@ -28,3 +23,7 @@ subtask: false
    - 为每个函数添加功能、参数注释
    - 为关键代码块、字典表、重要变量添加说明
 3. 完成后将task状态改为comment_finish
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

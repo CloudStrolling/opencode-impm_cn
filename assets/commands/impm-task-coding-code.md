@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 任务程序编写 - 根据task上下文和参考文件完成编码
 agent: pm
@@ -29,3 +24,7 @@ subtask: false
 4. 根据参考文件编写代码
 5. 编码时如需要可启动CS/WS/DBA/SA subagent辅助
 6. 完成后将task状态改为code_finish
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

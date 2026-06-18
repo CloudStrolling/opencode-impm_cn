@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 接口更新 - 将本次任务接口合并入全局接口文档
 agent: pm
@@ -29,3 +24,7 @@ subtask: false
    - 避免重复（如已有相同接口则覆盖更新）
    - 按模块组织，保持文档结构清晰
 3. 完成后输出合并结果路径
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->

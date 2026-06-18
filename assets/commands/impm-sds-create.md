@@ -1,8 +1,3 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 description: 创建sds - 根据PRD和架构文档生成技术规格说明
 agent: pm
@@ -28,3 +23,7 @@ subtask: false
    - 编写详细的技术规格说明
    - 在docs/sds/目录下输出sds文档
 4. 等待TL完成后，返回结果摘要和文档路径
+<!--
+SPDX-License-Identifier: Apache-2.0
+Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
+-->
