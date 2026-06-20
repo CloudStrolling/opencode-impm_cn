@@ -1,16 +1,16 @@
 ---
-name: impm-gitinit
+name: impm-git-init
 description: 检查并初始化Git仓库 - 检测当前项目是否已加入Git，未初始化则自动执行git init、生成.gitignore并暂存文件
 ---
 
-# impm-gitinit 技能
+# impm-git-init 技能
 
 ## 触发词
-impm-gitinit
+impm-git-init
 
 ## 何时使用
 - 新项目启动时
-- /impm-gitinit 命令启动时
+- /impm-git-init 命令启动时
 - 项目尚未纳入Git版本管理时
 
 ## 执行步骤

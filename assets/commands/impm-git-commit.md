@@ -12,17 +12,16 @@ subtask: false
 
 ## 你的职责
 
-启动VCA subagent执行impm-branch-commit技能，完成代码提交和分支合并。
+启动VCA subagent执行impm-git-commit技能，完成代码提交和分支合并。
 
 ## 操作流程
 
-1. 启动VCA subagent执行impm-branch-commit技能
+1. 启动VCA subagent执行impm-git-commit技能
 2. VCA subagent应：
    - 分析所有未提交的文件
    - 确定哪些需加入Git、哪些需排除
    - 将排除项列入排除清单
    - 提交剩余文件
-   - 将当前分支合并到主分支
 3. 等待VCA完成后，返回结果摘要
 <!--
 SPDX-License-Identifier: Apache-2.0
