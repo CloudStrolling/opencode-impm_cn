@@ -14,7 +14,7 @@ tools:
   impm_doc_reader: true
   impm_doc_writer: true
   impm_doc_version: true
-   impm_project_analyzer: true
+  impm_project_analyzer: true
   impm_git_helper: true
   impm_context_builder: true
 permission:
