@@ -19,7 +19,7 @@ impm-task-coding-context
 
 ## 执行内容
 
-1. 启用技术负责人（TL subagent），传入当前版本号和任务编号作为上下文。
+1. 接收当前版本号和任务编号作为上下文。
 2. 根据版本号定位task文件，根据任务编号在task文件中找到相应的任务内容。
 3. 根据任务内容中关联的userstory找到对应的prd的userstory内容。
 4. 然后从architecture.md、project.md和当前版本中sds中分析查询与上述任务相关的部分。

@@ -1,6 +1,6 @@
 ---
 name: impm-task-coding-code
-description: 执行编码6 - 任务程序编写
+description: 执行编码7 - 任务程序编写
 ---
 
 # impm-task-coding-code 技能
@@ -9,11 +9,10 @@ description: 执行编码6 - 任务程序编写
 impm-task-coding-code
 
 ## 何时使用
-- 针对一个任务进行具体编码的第六步：任务程序编写
+- 针对一个任务进行具体编码的第七步：任务程序编写
 
 ## 执行内容
-1. PM读取task的类型：前端任务，后端任务还是通用编程任务。根据不同类型，启动不同的subagent。前端任务启用：FE，后端任务启用BE，通用任务启用DE
-2. subagent启动后，按版本号和任务号找到并读取此前生成的参考文件：
+1. 按版本号和任务号找到并读取此前生成的参考文件：
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/context.md
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/cs.md
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/ws.md

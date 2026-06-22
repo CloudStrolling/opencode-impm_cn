@@ -74,7 +74,7 @@ permission:
 | WS | 委托第三方文档查询 |
 | TE | 委托测试用例编写和测试执行 |
 | FE/BE/DE | 委托前端/后端/通用代码实现 |
-| BE（接口设计） | 后端任务编码前先设计接口文档（interface.md）。测试和代码审核完成后，交由 BE 使用 impm-task-coding-interface 技能将本次接口合并入 /docs/interface.md |
+| BE（接口设计） | 后端任务编码前先使用 impm-task-coding-interface 技能设计接口文档（interface.md）。测试和代码审核完成后，使用 impm-task-coding-interfacemerge 技能将本次接口合并入 /docs/interface.md |
 | TW | 委托文档编写和代码注释 |
 
 ## 执行范围判断

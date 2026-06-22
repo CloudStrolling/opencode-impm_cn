@@ -41,46 +41,49 @@ impm-task-coding
 **功能：** 编写与本次任务相关的数据库设计文档和数据库脚本
 **输出:** docs/tasks/task_{v.x.y.z}/TASK-{001}/dbd.md 和 docs/tasks/task_{v.x.y.z}/TASK-{001}/dbd.sql
 
-### 步骤5：编写测试用例、测试代码和预期结果
+### 步骤5：接口设计
+**执行方式：** 启动BE subagent（后端开发），使用技能impm-task-coding-interface
+**功能：** 仅当有分前后端的业务需求且当前为后端任务时，设计本次任务需要对外提供的API接口。不满足条件则跳过。
+**输出:** docs/tasks/task_{v.x.y.z}/TASK-{001}/interface.md
+
+### 步骤6：编写测试用例、测试代码和预期结果
 **执行方式：** 启动TE subagent（测试工程师），使用技能impm-task-coding-testcase
 **功能：** 编写测试用例、测试代码和预期结果
 **输出:** docs/tasks/task_{v.x.y.z}/TASK-{001}/testcase.md
 
-### 步骤6：根据任务类型选择编码agent完成代码编写
+### 步骤7：根据任务类型选择编码agent完成代码编写
 **执行方式：** 
 - 前端任务 → 启动FE subagent，使用技能：impm-task-coding-code
 - 后端任务 → 启动BE subagent，使用技能：impm-task-coding-code
 - 通用任务 → 启动DE subagent，使用技能：impm-task-coding-code
 **功能：**
 - 根据当前版本前序流程生成的文档进行编码
-- BE subagent中的 impm-task-coding-code 技能会在编码前先设计接口文档（interface.md），编码后再进行接口实现
+- 编码前参考步骤5设计的 interface.md 接口定义，确保实现与接口一致
 
 **输出:**
 - 所有代码
-- docs/tasks/task_{v.x.y.z}/TASK-{001}/interface.md
 
-### 步骤7：代码审核
+### 步骤8：代码审核
 **执行方式：** 启动TL subagent（技术负责人），使用技能impm-task-coding-review
 **功能：** 审核代码的主要内容是否合适，格式是否正确，代码是否有可以优化的地方。
 **输出:** 如果审核不通过，则回到本task任务的开头第一步，重新执行全部流程。如果连续5次不通过，放弃，中止任务并报错。
 
-### 步骤8：测试验证
+### 步骤9：测试验证
 **执行方式：** 启动TE subagent（测试工程师），使用技能impm-task-coding-test
 **功能：** 用之前的测试用例和测试代码，执行测试。
 **输出:** 如果测试失败，则回到本task任务的开头第一步，重新执行全部流程。如果连续5次不通过，放弃，中止任务并报错。
 
-### 步骤9：接口文档更新
-**执行方式：** 启动BE subagent（后端开发），使用技能impm-task-coding-interface
-**功能：** 读取本次任务编写的接口文档：docs/tasks/task_{v.x.y.z}/TASK-{001}/interface.md。将本次更新的接口合并入全局接口文档：/docs/interface.md（如文件不存在则创建）
+### 步骤10：接口文档合并
+**执行方式：** 启动BE subagent（后端开发），使用技能impm-task-coding-interfacemerge
+**功能：** 仅当有分前后端的业务需求且当前为后端任务时，将本次设计的接口合并入全局接口文档：/docs/interface.md。不满足条件则跳过。
 **输出:** /docs/interface.md
 
-
-### 步骤10：代码注释
+### 步骤11：代码注释
 **执行方式：** 启动TW subagent（技术文档编写），使用技能impm-task-coding-comment
 **功能：** 为代码提供详尽的注释说明
 **输出:** 所有代码的注释
 
-### 步骤11：更新项目地图
+### 步骤12：更新项目地图
 **执行方式：** 启动SA subagent（架构师），使用技能impm-task-coding-projectmap
 **功能：** 将本次新增和更新的目录、文件和函数全部写入project.md的项目地图中
 **输出:** 更新project.md

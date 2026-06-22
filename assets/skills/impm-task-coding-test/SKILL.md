@@ -1,6 +1,6 @@
 ---
 name: impm-task-coding-test
-description: 执行编码8 - 测试代码编写与测试
+description: 执行编码9 - 测试代码编写与测试
 ---
 
 # impm-task-coding-test 技能
@@ -9,12 +9,11 @@ description: 执行编码8 - 测试代码编写与测试
 impm-task-coding-test
 
 ## 何时使用
-- 针对一个任务进行具体编码的第七步：测试代码编写与测试
+- 针对一个任务进行具体编码的第九步：测试代码编写与测试
 
 ## 执行内容
-1. PM启用TE subagent来编码测试代码与执行测试
-2. 如果已有完善的测试脚本编码，则无需重新编码，直接跳到执行测试脚本这一步。考虑到此前测试不通过，修改以后重新用测试脚本测试的场景。
-3. 如果需要重新写测试脚本，则在subagent启动后，按版本号和任务号找到并读取此前生成的参考文件：
+1. 检查是否已有完善的测试脚本，如有则直接跳到执行测试步骤（适用于修复后重新测试的场景）。
+2. 如需要编写或更新测试脚本，按版本号和任务号找到并读取此前生成的参考文件：
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/context.md
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/cs.md
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/ws.md

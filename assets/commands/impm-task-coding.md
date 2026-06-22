@@ -20,13 +20,14 @@ subtask: false
 2. 启动CS subagent执行impm-task-coding-cs技能，查询现有代码
 3. 启动WS subagent执行impm-task-coding-ws技能，查询网络资料
 4. 启动DBA subagent执行impm-task-coding-dbd技能，编写数据库设计
-5. 启动TE subagent执行impm-task-coding-testcase技能，编写测试用例
-6. 根据任务类型启动FE/BE/DE subagent执行impm-task-coding-code技能
-7. 启动TL subagent执行impm-task-coding-review技能
-8. 启动TE subagent执行impm-task-coding-test技能，执行测试。如测试失败，回退到第一步重新收集信息并编码；连续失败达上限则中止
-9. 启动BE subagent执行impm-task-coding-interface技能
-10. 启动TW subagent执行impm-task-coding-comment技能
-11. 启动SA subagent执行impm-task-coding-projectmap技能
+5. 判断是否为分前后端项目且为后端任务，如是则启动BE subagent执行impm-task-coding-interface技能设计接口；否则跳过
+6. 启动TE subagent执行impm-task-coding-testcase技能，编写测试用例
+7. 根据任务类型启动FE/BE/DE subagent执行impm-task-coding-code技能
+8. 启动TL subagent执行impm-task-coding-review技能
+9. 启动TE subagent执行impm-task-coding-test技能，执行测试。如测试失败，回退到第一步重新收集信息并编码；连续失败达上限则中止
+10. 判断是否为分前后端项目且为后端任务，如是则启动BE subagent执行impm-task-coding-interfacemerge技能合并接口；否则跳过
+11. 启动TW subagent执行impm-task-coding-comment技能
+12. 启动SA subagent执行impm-task-coding-projectmap技能
 
 
 ## 关键原则

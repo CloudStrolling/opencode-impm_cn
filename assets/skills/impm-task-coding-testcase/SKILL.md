@@ -1,6 +1,6 @@
 ---
 name: impm-task-coding-testcase
-description: 执行编码5 - 测试用例编写
+description: 执行编码6 - 测试用例编写
 ---
 
 # impm-task-coding-testcase 技能
@@ -9,11 +9,11 @@ description: 执行编码5 - 测试用例编写
 impm-task-coding-testcase
 
 ## 何时使用
-- 针对一个任务进行具体编码的第五步：测试的用例编写
+- 针对一个任务进行具体编码的第六步：测试用例编写
 
 ## 执行内容
 1. 如果测试文档已存在则跳过当前流程。将task（包含json和md）的状态改为：testcase_finish（主要是测试不通过，重新编码的场景。）
-2. 启用测试工程师（TE subagent），按版本号和任务号找到并读取此前生成的参考文件：
+2. 按版本号和任务号找到并读取此前生成的参考文件：
 - docs/tasks/task_{v.x.y.z}/TASK-{001}/context.md
 - docs/tasks/task_{v.x.y.z}/TASK-{001}/cs.md
 - docs/tasks/task_{v.x.y.z}/TASK-{001}/ws.md

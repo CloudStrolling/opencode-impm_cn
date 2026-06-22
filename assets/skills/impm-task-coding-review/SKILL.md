@@ -1,6 +1,6 @@
 ---
 name: impm-task-coding-review
-description: 执行编码7 - 代码审核
+description: 执行编码8 - 代码审核
 ---
 
 # impm-task-coding-review 技能
@@ -12,7 +12,6 @@ impm-task-coding-review
 - 针对一个任务进行具体编码的第八步：代码审核
 
 ## 执行内容
-### PM启用TL subagent来执行代码审核
 ### 按版本号和任务号找到并读取此前生成的参考文件：
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/context.md
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/cs.md

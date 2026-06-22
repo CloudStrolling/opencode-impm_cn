@@ -12,9 +12,8 @@ impm-task-coding-dbd
 - 针对一个任务进行具体编码的第四步：数据库设计
 
 ## 执行内容
-1. 启用数据库管理员（DBA subagent），
-2. 首先查询项目是否需要数据库，是否存在/docs/dbd.md。如果文件不存在，则认定项目无需数据库，直接跳过流程。
-3. 按上下文中的版本号和任务号找到并读取此前生成的参考文件：
+1. 首先查询项目是否需要数据库，是否存在 `/docs/dbd.md`。如果文件不存在，则认定项目无需数据库，直接跳过流程。
+2. 按上下文中的版本号和任务号找到并读取此前生成的参考文件：
 - docs/tasks/task_{v.x.y.z}/TASK-{001}/context.md
 - docs/tasks/task_{v.x.y.z}/TASK-{001}/cs.md
 - docs/tasks/task_{v.x.y.z}/TASK-{001}/ws.md

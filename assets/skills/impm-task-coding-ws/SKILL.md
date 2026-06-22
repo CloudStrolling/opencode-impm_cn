@@ -12,8 +12,7 @@ impm-task-coding-ws
 - 针对一个任务进行具体编码的第三步：查询网络参考资料
 
 ## 执行内容
-1. 启用网络技术文档查询（WS subagent），
-2. 按上下文中的版本号和任务号找到并读取此前生成的参考文件：
+1. 按上下文中的版本号和任务号找到并读取此前生成的参考文件：
 - docs/tasks/task_{v.x.y.z}/TASK-{001}/context.md
 - docs/tasks/task_{v.x.y.z}/TASK-{001}/cs.md
   大括号中的内容分别是版本号和任务编号。

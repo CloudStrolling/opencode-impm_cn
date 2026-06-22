@@ -11,6 +11,10 @@ tools:
   impm_context_builder: true
 permission:
   task:
+    cs: "allow"
+    ws: "allow"
+    dba: "allow"
+    sa: "allow"
     "*": "deny"
 ---
 
