@@ -32,7 +32,7 @@ subtask: false
 
 | Agent | 允许调用的subagent |
 |-------|-------------------|
-| SA | BA/CS/WS |
+| SA | CS/WS |
 | BA | 无 |
 | VCA | 无 |
 | TL | 无 |

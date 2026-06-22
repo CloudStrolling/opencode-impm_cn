@@ -75,7 +75,7 @@ impm-task-create
 - 必要时向用户提问澄清需求
 
 ### 5. 写入文件
-使用impm_doc_writer写入.md文件，使用impm_task_manager（action=init）初始化.json文件。
+使用impm_doc_writer写入.md文件，同时生成.json文件。
 然后将docs/project.md 的当前进度改为：impm-task
 
 ### 6. 返回文件位置

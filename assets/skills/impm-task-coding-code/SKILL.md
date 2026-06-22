@@ -23,12 +23,6 @@ impm-task-coding-code
   - docs/project.md
   大括号中的内容分别是版本号和任务编号。
 3. 【前端任务接口参考】如果本任务是前端任务（FE agent），则在编码前先读取后端编写的接口文档 /docs/interface.md，了解API接口定义后再编写前端代码。
-4. 【后端任务接口设计】如果本任务是后端任务（BE agent）且需要对外提供API接口，则在编码前先设计接口：
-   a. 读取接口文档模板：assets/skills/impm-task-coding-interface/INTERFACE-TEMPLATE.MD
-   b. 根据参考文件设计接口（请求方法、路径、参数、响应格式等）
-    c. 将接口设计写入：docs/tasks/task_{v.x.y.z}/TASK-{001}/interface.md
-    d. 将接口模板文件也复制到任务目录下作为后续参考
-    e. 后端编码完成后，将接口定义汇总更新到 /docs/interface.md，供前端任务参考
 5. 如果testcase.md中存在未通过测试，则当前编码属于修复编码，主要关注测试不通过部分的修改。
 6. 如果review.md存在且包含未通过的检查项，则按检查要求修改代码。
 7. 根据上述文件内容编写代码，编码力求简洁，逻辑清晰，函数和文件大小适中。

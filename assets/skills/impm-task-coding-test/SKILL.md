@@ -1,6 +1,6 @@
 ---
 name: impm-task-coding-test
-description: 执行编码7 - 测试代码编写与测试
+description: 执行编码8 - 测试代码编写与测试
 ---
 
 # impm-task-coding-test 技能

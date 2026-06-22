@@ -1,11 +1,6 @@
-<!--
-SPDX-License-Identifier: Apache-2.0
-Copyright 2026 CloudStrolling/jenemy8023 <jenemy8023@163.com>
--->
-
 ---
 name: impm-task-coding-comment
-description: 执行编码9 - 代码注释
+description: 执行编码10 - 代码注释
 ---
 
 # impm-task-coding-comment 技能

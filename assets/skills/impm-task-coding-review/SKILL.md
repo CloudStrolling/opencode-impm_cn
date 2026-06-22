@@ -1,6 +1,6 @@
 ---
 name: impm-task-coding-review
-description: 执行编码8 - 代码审核
+description: 执行编码7 - 代码审核
 ---
 
 # impm-task-coding-review 技能
@@ -19,6 +19,7 @@ impm-task-coding-review
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/ws.md
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/dbd.md
   - docs/tasks/task_{v.x.y.z}/TASK-{001}/testcase.md
+  - docs/tasks/task_{v.x.y.z}/TASK-{001}/interface.md
   - docs/project.md
   - docs/architecture.md
   大括号中的内容分别是版本号和任务编号。
@@ -102,7 +103,7 @@ impm-task-coding-review
 文件保存在 docs/tasks/task_{v.x.y.z}/TASK-{001}/review.md。如果文件已经存在，就覆盖。
 
 ### 后续处理
-如果review.md 不是全部都通过。返回PM，PM就返回第六步重新修改代码。
+如果review.md 不是全部都通过。返回PM，PM就回到本task任务的开头第一步，重新收集信息并编码。
 如果review.md全部通过  task状态改为review-finish
 
 ## 完成后提示
